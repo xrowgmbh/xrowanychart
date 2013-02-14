@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<software>
+    <metadata>
+        <name>xrow Any/Map Chart</name>
+        <version>1.0</version>
+        <copyright>Copyright (C) 2013 xrow GmbH</copyright>
+        <author>Björn Dieding</author>
+        <license>GPL License</license>
+        <info_url>http://www.xrow.com</info_url>
+
+        <software>
+            <uses>
+                <name>Any Chart</name>
+                <license>Commerial: Sibental EULA AnyChart Website License http://www.anychart.com/buy/AnyChart_EULA.pdf</license>
+                <copyright>Copyright (c) SIBENTAL</copyright>
+                <info_url>http://www.anychart.com/</info_url>
+                <version>1.0</version>
+            </uses>
+        </software>
+
+    </metadata>
+
+    <dependencies>
+        <requires>
+            <extension name="ezjscore" />
+        </requires>
+    </dependencies>
+
+</software>
