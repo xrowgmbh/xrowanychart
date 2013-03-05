@@ -1,13 +1,13 @@
-﻿XrowAnyChart Extension for eZ publish
+﻿xrowAnyChart Extension for eZ publish
 ============================================
 
 Installation
 ------------
 Copy the files and place them under the extension directory in your 
-eZ publish root folder.
+eZ Publish root folder.
 
-To enable this xrowanychart extension you need eZ publish 3.6 or later. In 
-site.ini.append.php set the following configuration switches:
+To enable this xrowanychart extension you need eZ Publish 4.x or later.
+In  site.ini.append.php set the following configuration switches:
 
 [ExtensionSettings]
 ActiveExtensions[]=xrowanychart
@@ -23,13 +23,12 @@ Usage
 
 Rewriterule ^extension/xrowanychart/anymap/AnyChart.swf - [L] 
 
+---------
+
 WARNING: 
------
+
+The files below are protected by copyright law. You can buy the licence at http://www.anychart.com/.
+
 1.AnyChart.swf
 2.AnyChart.js
 3.AnyChartHTML5.js
-
-The above files are protected by copyright law.
-Please respect the copyright. 
-Buy official version: http://www.anychart.com/buy/
-
