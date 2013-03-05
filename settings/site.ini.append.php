@@ -4,4 +4,6 @@ PolicyOmitList[]=anymap/maps
 PolicyOmitList[]=anymap/xml
 PolicyOmitList[]=extension/xrowanychart
 
+[RegionalSettings]
+TranslationExtensions[]=xrowanychart
 */ ?>

@@ -6,6 +6,7 @@ DesignExtensions[]=xrowanychart
 FrontendJavaScriptList[]=AnyChart.js
 FrontendJavaScriptList[]=AnyChartHTML5.js
 FrontendJavaScriptList[]=common.js
+FrontendJavaScriptList[]=flash_detect_min.js
 
 [StylesheetSettings]
 FrontendCSSFileList[]=anychart.css
