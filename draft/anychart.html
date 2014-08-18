@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Chart</title>
+	<script type="text/javascript" language="javascript" src="./js/AnyChartHTML5.js"></script>
+    <script type="text/javascript" language="javascript" src="./js/AnyChart.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript" language="javascript">
+      //<![CDATA[
+	  
+	  AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
+		var chart = new AnyChart();
+		chart.width =1400;
+		chart.height = 400;
+		chart.setXMLFile('./anychart.xml');
+		chart.write();
+	  //]]>
+    </script>
+  </body>
+</html>
