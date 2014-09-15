@@ -4,7 +4,7 @@ DesignExtensions[]=xrowanychart
 
 [JavaScriptSettings]
 FrontendJavaScriptList[]=AnyChart.js
-FrontendJavaScriptList[]=common.js
+FrontendJavaScriptList[]=commonanychart.js
 FrontendJavaScriptList[]=AnyChartHTML5.js
 
 [StylesheetSettings]
