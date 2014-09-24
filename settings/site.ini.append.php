@@ -6,4 +6,7 @@ PolicyOmitList[]=extension/xrowanychart
 
 [RegionalSettings]
 TranslationExtensions[]=xrowanychart
+
+[RoleSettings]
+PolicyOmitList[]=downloadPNG/download
 */ ?>
