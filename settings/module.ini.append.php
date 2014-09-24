@@ -4,6 +4,5 @@
 ExtensionRepositories[]=xrowanychart
 ModuleList[]=anymap
 ModuleList[]=extension
-ModuleList[]=downloadPNG
 
 */ ?>

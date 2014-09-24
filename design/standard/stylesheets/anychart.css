@@ -1,25 +1,4 @@
 @CHARSET "UTF-8";
-
-@font-face {
-    font-family: 'FontAwesome';
-  src: url(/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.eot?v=4.2.0);
-  src: url(/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.ttf?v=4.2.0) format(truetype), 
-       url(/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.eot?#iefix&v=4.2.0) format(embedded-opentype), 
-       url(/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.woff?v=4.2.0) format(woff), 
-       url(/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular) format(svg);
-  font-weight: normal;
-  font-style: normal;
-}
-
-
-.fa-table:before {
-    font-family: 'FontAwesome';
-content: "\f0ce";
-    font-size: 0.75em;
-}
-
-
-
 .anychart{
     height:auto;
 }
@@ -29,33 +8,4 @@ content: "\f0ce";
     color:red;
     margin:50px 0 50px 0;
     text-align:center;
-}
-
-.anychart_attr{
-    overflow-y: hidden;
-    overflow-x: auto;
-    width: 100%;
-    height: 100%;
-   
-}
-
-.svgChart {
-    background-color: white;
-}
-
-.buttonStyle {
-    
-    margin-left: 5px;
-    
-    padding-top:2px;
-}
-
-.svgButtons {
-    height: 50px;
-}
-
-.tablePopup {
-    visibility: hidden;
-    background-color: white;
-}
-
+} 

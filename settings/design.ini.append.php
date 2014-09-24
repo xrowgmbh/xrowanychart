@@ -9,4 +9,5 @@ FrontendJavaScriptList[]=AnyChartHTML5.js
 
 [StylesheetSettings]
 FrontendCSSFileList[]=anychart.css
+
 */ ?>
