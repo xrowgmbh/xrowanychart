@@ -1,6 +1,56 @@
 @CHARSET "UTF-8";
+
+@font-face {
+    font-family: 'FontAwesome';
+    src:url('/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.eot?v=4.2.0');
+    src:url('/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.eot?#iefix&v=4.2.0') format('embedded-opentype'),
+        url('/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.woff?v=4.2.0') format('woff'),
+        url('/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.ttf?v=4.2.0') format('truetype'),
+        url('/extension/xrowanychart/design/standard/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.fa-table:before {
+    font-family: 'FontAwesome';
+    content: "\f0ce";
+    padding: 0;
+    margin: 0;
+    font-size: 20px!important;
+    vertical-align: top;
+}
+
+.fa-times:before {
+    font-family: 'FontAwesome';
+    content: "\f00d";
+    padding: 0;
+    margin: 0;
+    font-size: 20px!important;
+    vertical-align: top;
+}
+
+.fa-download:before{
+    font-family: 'FontAwesome';
+    content: "\f019";
+    padding: 0;
+    margin: 0;
+    font-size: 20px!important;
+    vertical-align: top;
+}
+
+.fa-arrows-alt:before{
+    font-family: 'FontAwesome';
+    content: "\f0b2";
+    padding: 0;
+    margin: 0;
+    font-size: 20px!important;
+    vertical-align: top;
+}
+
 .anychart{
     height:auto;
+    margin-top: 1% ;
+    width: 100%;
 }
 
 #flash_warning{
@@ -8,4 +58,89 @@
     color:red;
     margin:50px 0 50px 0;
     text-align:center;
-} 
+}
+
+.anychart-attr {
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.anychart-tableScroll{
+    overflow-y: hidden;
+    overflow-x: auto; 
+    width: 96%;
+    margin: 0 0 0 2%;
+}
+
+.anychart-gridtable {
+    margin: 2% auto 0 auto;
+}
+
+
+.anychart-gridtable th, .anychart-gridtable td {
+    color: black;
+    padding: 0 1em;
+    text-align: right;
+}
+
+.anychart svg {
+    background-color: white;
+}
+
+.anychart-svgChart{
+    overflow-y: hidden;
+    overflow-x: auto;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.anychart-svgButtons {
+    position:absolute;
+    z-index:99; /* In order to avoid that the buttons get behind the SVG chart */ 
+    margin-top: -15px;
+}
+
+.anychart-tablePopup {
+    background-color: white;
+}
+
+.anychart-buttonStyle {
+    background: none repeat scroll 0 0 #005498;
+    border:1px solid #005498;
+    border-radius: 0;
+    cursor:pointer;
+    color:#ffffff;
+    margin-left: 5px;
+    float: right;
+    height: 30px;
+    width: 30px;
+    padding: 1px 5px 1px 5px;
+    line-height: 24px;
+}
+
+.anychart-buttonStyle:hover {
+    background-color:#b60906;
+}
+
+.anychart-ButtonClose {
+    background-color:#005498;
+    border:1px solid #005498;
+    cursor:pointer;
+    color:#ffffff;
+    margin-top: 0.25%;
+    margin-right: 0.25%;
+    padding: 0px;
+    z-index:99999; 
+    top:0; 
+    right: 0; 
+    position: absolute;
+    line-height: 1;
+}
+.anychart-ButtonClose:hover {
+    background-color:#b60906;
+}
+
+
