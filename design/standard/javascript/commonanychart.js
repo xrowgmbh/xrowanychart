@@ -198,6 +198,7 @@ $(document).ready(function()
         {
             $(this).find(".anychart-svgChart").find(".anychart-ButtonClose").remove();
             $(this).find(".anychart-tablePopup").css("visibility","hidden");
+            $(this).find(".anychart-svgChart").children("svg").css("background-color","transparent ");
             $(this).find(".anychart-tablePopup").html("");
         }
     });
@@ -211,6 +212,7 @@ $(document).ready(function()
     });
     
     $(".ButtonIncrease").click(function() {
+        $(this).parent().parent().children(".anychart-attr").find(".anychart-svgChart").children("svg").css("background-color","white ");
         $(this).parent().parent().children(".anychart-attr").find(".anychart-svgChart").fullScreen(true);
         $(this).parent().parent().children(".anychart-attr").find(".anychart-svgChart").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
     });
