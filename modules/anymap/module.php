@@ -26,4 +26,9 @@ $ViewList["maps"] = array(
         'MapName'
     ) 
 );
+
+$ViewList['download'] = array( 'functions' => array( 'download' ),
+		'script' => 'imagick.php'
+);
+
 $FunctionList = array();
