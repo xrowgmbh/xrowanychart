@@ -186,14 +186,8 @@ $(document).ready(function()
             chart.setXMLFile(path_anychart);
             var chartContainerID = "#" + id + "_svg";
             $(chartContainerID).css("height",height_anychart);
-            $(chartContainerID).css("width",width_anychart);
-            if(width_anychart < $(this).width())
-            {
-                $(this).find(".anychart-svgButtons").css("width",width_anychart); // arrange the buttons properly
-            }
-            else{
-                $(this).find(".anychart-svgButtons").css("width",$(this).width()); // arrange the buttons properly
-            }
+            $(chartContainerID).css("width","100%");
+            
             chart.write(id + "_svg");
             
        });
@@ -223,8 +217,8 @@ $(document).ready(function()
     
     $( ".ButtonDownload" ).click(function() 
     {   
-        var SVGwidth = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").css("width");
-        var SVGheight = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").css("height");
+        var SVGwidth = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").outerWidth();
+        var SVGheight = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").outerHeight();
         var SVGhtml = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").find("svg").html();
         var SVGstring = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" + 
                         "<svg width=\"" + SVGwidth +"\" height=\"" + SVGheight + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">" + SVGhtml +"</svg>";

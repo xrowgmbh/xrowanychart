@@ -98,9 +98,11 @@
 }
 
 .anychart-svgButtons {
-    position:absolute;
+    position: sticky;
     z-index:99; /* In order to avoid that the buttons get behind the SVG chart */ 
     margin-top: -15px;
+    width: 110px;
+    float: right;
 }
 
 .anychart-tablePopup {
