@@ -164,23 +164,17 @@ $(document).ready(function()
                 type: "GET",
                 async: false,
                 url: path_anychart,
+                dataType: "xml",
                 success: function(data){
                   xmlDoc=data;
                 }
               });
             
-            for(var i = 0; i < xmlDoc.children[0].attributes.length; i++)
-            {
-                if(xmlDoc.children[0].attributes[i].name == "width")
-                {
-                    width_anychart = xmlDoc.children[0].attributes[i].nodeValue;
-                }
-                
-                if(xmlDoc.children[0].attributes[i].name == "height")
-                {
-                    height_anychart = xmlDoc.children[0].attributes[i].nodeValue;
-                }
-            }
+
+            var anychart_element = xmlDoc.getElementsByTagName('anychart');
+            //var width_anychart = anychart_element[0].getAttribute('width');
+            var height_anychart = anychart_element[0].getAttribute('height');
+
             chart.width = "100%";
             chart.height = "100%";
             chart.setXMLFile(path_anychart);
@@ -202,8 +196,6 @@ $(document).ready(function()
             $(this).find(".anychart-tablePopup").html("");
         }
     });
-    
-    
     
     $(".htmltableclass").click(function() {
         $(this).parent().parent().find(".anychart-tablePopup").createTable($.ez.root_url + $(this).parent().parent().data('xmlfile'));
