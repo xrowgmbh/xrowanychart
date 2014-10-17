@@ -192,32 +192,43 @@ $(document).ready(function()
         {
             $(this).find(".anychart-svgChart").find(".anychart-ButtonClose").remove();
             $(this).find(".anychart-tablePopup").css("visibility","hidden");
-            $(this).find(".anychart-svgChart").children("svg").css("background-color","transparent ");
+            $(this).find(".anychart-svgChart").children("svg").css("background-color", "transparent");
             $(this).find(".anychart-tablePopup").html("");
         }
     });
     
     $(".htmltableclass").click(function() {
-        $(this).parent().parent().find(".anychart-tablePopup").createTable($.ez.root_url + $(this).parent().parent().data('xmlfile'));
-        $(this).parent().parent().children(".anychart-tablePopup").fullScreen(true);
-        $(this).parent().parent().find(".anychart-tablePopup").css("visibility","visible");
+        var anychart_root = $(this).closest(".anychart");
+        anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile'));
+        anychart_root.children(".anychart-tablePopup").fullScreen(true);
+        anychart_root.find(".anychart-tablePopup").css("visibility","visible");
     });
     
     $(".ButtonIncrease").click(function() {
-        $(this).parent().parent().children(".anychart-attr").find(".anychart-svgChart").children("svg").css("background-color","white ");
-        $(this).parent().parent().children(".anychart-attr").find(".anychart-svgChart").fullScreen(true);
-        $(this).parent().parent().children(".anychart-attr").find(".anychart-svgChart").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
+        var anychart_root = $(this).closest(".anychart");
+        anychart_root.find(".anychart-svgChart").children("svg").css("background-color","white");
+        anychart_root.find(".anychart-svgChart").fullScreen(true);
+        anychart_root.find(".anychart-svgChart").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
     });
-    
+
     $( ".ButtonDownload" ).click(function() 
-    {   
-        var SVGwidth = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").outerWidth();
-        var SVGheight = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").outerHeight();
-        var SVGhtml = $(this).parent().parent().parent().children(".anychart-attr").find(".anychart-svgChart").find("svg").html();
+    {
+        var anychart_root = $(this).closest(".anychart");
+        var SVGwidth = anychart_root.find(".anychart-svgChart").outerWidth();
+        var SVGheight = anychart_root.find(".anychart-svgChart").outerHeight();
+
+        //workaround to solve the svg access problem
+        var tmp_html = $(this).closest(".anychart").find("svg").parent().html();
+        var beginn = tmp_html.indexOf("<defs>");
+        var tmp_html = tmp_html.substr(beginn);
+        var ende = tmp_html.indexOf("</svg>");
+        var SVGhtml = tmp_html.substr(0, ende);
+        
         var SVGstring = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" + 
                         "<svg width=\"" + SVGwidth +"\" height=\"" + SVGheight + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">" + SVGhtml +"</svg>";
         SVGstring = SVGstring.replace(/#ac_/g, "Xac_"); // replace invalid '#' characters
-        $(this).prev().attr("value",SVGstring);
+        anychart_root.find("input[name='svg']").attr("value", SVGstring);
+
     });
 
     $.fn.createTable = function(xml) 
@@ -262,9 +273,9 @@ $(document).ready(function()
             
             tableString = "<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button><div class=\"anychart-tableScroll\"><table class=\"anychart-gridtable\"><tr><th></th>";  
             /* execute for every series and build the table headers */
-            for(var i = 0; i < xmlContents[0].pointname.length; i++)    
+            for(var i = 0; i < xmlContents[0].pointname.length; i++)
             {
-                tableString += "<th>" + xmlContents[0].pointname[i].nodeValue + "</th>";    
+                tableString += "<th>" + xmlContents[0].pointname[i].nodeValue + "</th>";
             }
 
             /* execute for the number of points */
