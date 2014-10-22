@@ -12,6 +12,8 @@ In  site.ini.append.php set the following configuration switches:
 [ExtensionSettings]
 ActiveExtensions[]=xrowanychart
 
+To use all features you should implement the jquery.fullscreen-min.js as well https://github.com/kayahr/jquery-fullscreen-plugin
+
 Usage
 -----
 1. Insert additional <div> tags to the Template:
@@ -23,9 +25,18 @@ Usage
 
 Rewriterule ^extension/xrowanychart/anymap/AnyChart.swf - [L] 
 
----------
+Known Issues
+------------
+
+- Firefox: When the tooltip of a chart opens(mousehover), the text flickers
+- Internet Explorer lower than 11: Fullscreen doesnt work at all ( v. jquery.fullscreen 1.1.5)
+- Safari PC: Fullscreen looks pretty bad ( v. jquery.fullscreen 1.1.5)
+- Safari Ipad: Fullscreen doesnt work at all ( v. jquery.fullscreen 1.1.5)
+- The fullscreen mode needs to be improved in general. The size and background color is not that great in chrome for example
+- Internet Explorer 11: After leaving the fullscreen mode, we got a scrollbar in our chart.. (whitespace appears?)
 
 WARNING: 
+---------
 
 The files below are protected by copyright law. You can buy the licence at http://www.anychart.com/.
 
