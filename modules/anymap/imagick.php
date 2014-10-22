@@ -1,6 +1,8 @@
 <?php 
+
 $UID = uniqid();
 $svgData = $_POST['svg'];
+
 try{
     if ((strpos($svgData,'<svg') && strpos($svgData,'</def') ) !== false)
     {
@@ -8,11 +10,12 @@ try{
         $svgFilename = $picturesFilepath.$UID.".svg";
         $pngFilename = $picturesFilepath.$UID.".png";
         $file=$pngFilename;
-        
+
         file_put_contents($svgFilename,$svgData);// write required data to SVG file
-        shell_exec("convert ".$svgFilename." ".$pngFilename); // convert to PNG
+
+        shell_exec("convert -density 288 " . $svgFilename . " -resize 25% " . $pngFilename ); // convert to PNG
         unlink($svgFilename); // delete SVG
-        
+
         header('Content-Description: File Transfer');
         header('Content-Type: image/png'); // set MIME Type to PNG
         header('Content-Disposition: attachment; filename=chart_'.$UID);
