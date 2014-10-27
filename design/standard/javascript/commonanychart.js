@@ -146,46 +146,79 @@ $(document).ready(function()
         });
     }
 
-    if($(".anychart").length>0)
+    function load_anycharts( imagemap_click = false, class_name = "" )
     {
-        $(".anychart").each(function()
+        if($(".anychart").length>0)
         {
-            var id = $(this).attr('id');
-            var getNode = $(this);
-            var path_anychart = $.ez.root_url + $(this).data('xmlfile');
+            if( imagemap_click === false )
+            {
+                var search_pattern = ".anychart";
+            }
+            else
+            {
+                var area_class_id = class_name.split("_");
+                area_class_id = area_class_id[1];
+                var search_pattern = "#anychart-" + area_class_id;
+                $(search_pattern).closest('.embed-image_map').find(".anychart").hide();
+            }
             
-            
-            AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
-            var chart = new AnyChart();
-            var width_anychart;
-            var height_anychart;
-            
-            $.ajax({
-                type: "GET",
-                async: false,
-                url: path_anychart,
-                dataType: "xml",
-                success: function(data){
-                  xmlDoc=data;
+            $( search_pattern ).each(function()
+            {
+                $(this).show();
+                var id = $(this).attr('id');
+                
+                /* start embed code work for imagemap */
+                var id_number = id.split("-");
+                id_number = id_number[1];
+                if( $(this).closest('.embed-image_map').find(" area[class^='chart_" + id_number + "']" ).length > 0 && imagemap_click === false )
+                {
+                    //skip this because it is a chart by the image map
+                    return true;
                 }
-              });
-            
-
-            var anychart_element = xmlDoc.getElementsByTagName('anychart');
-            //var width_anychart = anychart_element[0].getAttribute('width');
-            var height_anychart = anychart_element[0].getAttribute('height');
-
-            chart.width = "100%";
-            chart.height = "100%";
-            chart.setXMLFile(path_anychart);
-            var chartContainerID = "#" + id + "_svg";
-            $(chartContainerID).css("height",height_anychart);
-            $(chartContainerID).css("width","100%");
-            
-            chart.write(id + "_svg");
-            
-       });
+                var getNode = $(this);
+                var path_anychart = $.ez.root_url + $(this).data('xmlfile');
+                
+                
+                AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
+                var chart = new AnyChart();
+                var width_anychart;
+                var height_anychart;
+                
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: path_anychart,
+                    dataType: "xml",
+                    success: function(data){
+                      xmlDoc=data;
+                    }
+                  });
+                
+    
+                var anychart_element = xmlDoc.getElementsByTagName('anychart');
+                //var width_anychart = anychart_element[0].getAttribute('width');
+                var height_anychart = anychart_element[0].getAttribute('height');
+    
+                chart.width = "100%";
+                chart.height = "100%";
+                chart.setXMLFile(path_anychart);
+                var chartContainerID = "#" + id + "_svg";
+                $(chartContainerID).css("height",height_anychart);
+                $(chartContainerID).css("width","100%");
+                
+                chart.write(id + "_svg");
+                
+           });
+        }
     }
+    
+    //initial loading
+    load_anycharts(false);
+    
+    //load charts on click
+    $( "area[class^='chart']" ).click(function() {
+        load_anycharts(true, $(this).attr('class'));
+    });
     
     $(document).bind("fullscreenchange", function() {
         if($(document).fullScreen() == false)

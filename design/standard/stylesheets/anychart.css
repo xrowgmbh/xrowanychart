@@ -11,6 +11,11 @@
     font-style: normal;
 }
 
+area
+{
+    cursor: pointer;
+}
+
 .fa-table:before {
     font-family: 'FontAwesome';
     content: "\f0ce";
