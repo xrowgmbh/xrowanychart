@@ -58,6 +58,11 @@ area
     width: 100%;
 }
 
+.embed_view .anychart
+{
+    margin-top: 0;
+}
+
 #flash_warning{
     font-size:1.2em;
     color:red;
