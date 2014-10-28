@@ -146,7 +146,7 @@ $(document).ready(function()
         });
     }
 
-    function load_anycharts( imagemap_click = false, class_name = "" )
+    function load_anycharts( imagemap_click, class_name )
     {
         if($(".anychart").length>0)
         {
@@ -213,11 +213,13 @@ $(document).ready(function()
     }
     
     //initial loading
-    load_anycharts(false);
+    $('img[usemap]').rwdImageMaps();
+    load_anycharts(false, "");
     
     //load charts on click
-    $( "area[class^='chart']" ).click(function() {
+    $( "area[class^='chart']" ).on('click', function() {
         load_anycharts(true, $(this).attr('class'));
+        
     });
     
     $(document).bind("fullscreenchange", function() {
