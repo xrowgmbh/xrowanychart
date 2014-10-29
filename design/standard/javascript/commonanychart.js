@@ -173,7 +173,12 @@ $(document).ready(function()
                 if( $(this).closest('.embed-image_map').find(" area[class^='chart_" + id_number + "']" ).length > 0 && imagemap_click === false )
                 {
                     //skip this because it is a chart by the image map
+                    $(this).hide();
                     return true;
+                }
+                else
+                {
+                    $(this).show();
                 }
                 var getNode = $(this);
                 var path_anychart = $.ez.root_url + $(this).data('xmlfile');
@@ -193,8 +198,7 @@ $(document).ready(function()
                       xmlDoc=data;
                     }
                   });
-                
-    
+
                 var anychart_element = xmlDoc.getElementsByTagName('anychart');
                 //var width_anychart = anychart_element[0].getAttribute('width');
                 var height_anychart = anychart_element[0].getAttribute('height');

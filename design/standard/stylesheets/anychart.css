@@ -58,11 +58,6 @@ area
     width: 100%;
 }
 
-.embed_view .anychart
-{
-    margin-top: 0;
-}
-
 #flash_warning{
     font-size:1.2em;
     color:red;
@@ -88,14 +83,11 @@ area
     margin: 2% auto 0 auto;
 }
 
-
 .anychart-gridtable th, .anychart-gridtable td {
     color: black;
     padding: 0 1em;
     text-align: right;
 }
-
-
 
 .anychart-svgChart{
     overflow-y: hidden;
@@ -111,7 +103,6 @@ area
     width: 110px;
     float: right;
 }
-
 
 .anychart-buttonStyle {
     background: none repeat scroll 0 0 #005498;
