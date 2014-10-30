@@ -99,7 +99,7 @@ area
 .anychart-svgButtons {
     position: sticky;
     z-index:99; /* In order to avoid that the buttons get behind the SVG chart */ 
-    margin-top: -15px;
+    margin-top: 20px;
     width: 110px;
     float: right;
 }
