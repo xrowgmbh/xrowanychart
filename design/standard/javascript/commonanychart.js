@@ -29,6 +29,12 @@ $(document).ready(function()
                 {
                     title = $(this).children("caption").html();
                 }
+                
+                if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
+                {
+                    legend = ' <legend enabled="true" position="Bottom" ignore_auto_item="true" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><items><item source="Points" /></items><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
+                }
+                
                 chartData[tableIndex].series[0].name = "Series";
                 $(this).find("th").each(function()
                 {
@@ -41,6 +47,11 @@ $(document).ready(function()
                 if($(this).children("caption").html() != null)
                 {
                     title = $(this).children("caption").html();
+                }
+                
+                if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
+                {
+                    legend = ' <legend enabled="true" position="Bottom" ignore_auto_item="true" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><items><item source="Points" /></items><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
                 }
                 chartData[tableIndex].series[0].name = "Series";
 
@@ -56,8 +67,8 @@ $(document).ready(function()
                 {
                     title = $(this).children("caption").html();
                 }
-
                 legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
+                
                 for(var i = 1; i < htmlData[tableIndex].context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
                 {
                     chartData[tableIndex].series[i-1] = { name: htmlData[tableIndex].context.children[tableChildrenLength].children[i].children[0].textContent , points: []}         
@@ -75,7 +86,6 @@ $(document).ready(function()
 
         if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
         {
-            legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
             tmp +='<chart plot_type="'+$(this).data("diagram-type")+'">';
         }
         else
