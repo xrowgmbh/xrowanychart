@@ -4,50 +4,85 @@ $(document).ready(function()
     if($(".diagram").length>0)
     {
         var htmlData = [];
-        var tableIndex = 0;
         var chartData = [];
+        var tableIndex = 0;
 
         $(".diagram").each(function()
         {
+            var tmp = '<?xml version="1.0" encoding="UTF-8"?>\
+                <anychart width="1000" height="900">\
+                <settings>\
+                <animation enabled="True" />\
+                </settings>\
+                <charts>';
+
             var title = "";
-            chartData[tableIndex] =     { series: [{ name:"", points: []}]};
-            htmlData[htmlData.length] = $(this).find("trbody"); //html ins DOM Objekt
+            var legend = "";
+            htmlData[htmlData.length] = $(this); //html ins DOM Objekt
             var tableChildrenLength = htmlData[tableIndex].context.children.length - 1;
-
-            if(htmlData[tableIndex].context.children[0].length != 0)
+            var z = 0;
+            chartData[tableIndex] =     { series: [{ name:"", points: []}]};
+            
+            if($(this).children().children("tr").eq(0).children("th").size() == 1 )
             {
-                title = htmlData[tableIndex].context.children[0].textContent;
+                if($(this).children("caption").html() != null)
+                {
+                    title = $(this).children("caption").html();
+                }
+                chartData[tableIndex].series[0].name = "Series";
+                $(this).find("th").each(function()
+                {
+                    chartData[tableIndex].series[0].points[z] = {name: $(this).html(), value: $(this).next().html().replace(",", ".") }
+                    z++;
+                });
             }
-
-            for(var i = 1; i < htmlData[tableIndex].context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
+            else if ($(this).children().children("tr").eq(0).children("th").size() > 1 && $(this).children().children("tr").eq(1).children("th").size() == 0)
             {
-                chartData[tableIndex].series[i-1] = { name: htmlData[tableIndex].context.children[tableChildrenLength].children[i].children[0].textContent , points: []}         
-                for(var a =  1; a < htmlData[tableIndex].context.children[tableChildrenLength].children[i].children.length; a++)
-                {   
-                    chartData[tableIndex].series[i-1].points[a-1] = { name: htmlData[tableIndex].context.children[tableChildrenLength].children[0].children[a].textContent,
-                                                                     value: htmlData[tableIndex].context.children[tableChildrenLength].children[i].children[a].textContent}
+                if($(this).children("caption").html() != null)
+                {
+                    title = $(this).children("caption").html();
+                }
+                chartData[tableIndex].series[0].name = "Series";
+
+                $(this).find("th").each(function()
+                {
+                    chartData[tableIndex].series[0].points[z] = {name: $(this).html(), value: $(this).parent().next().children().eq(z).html().replace(",", ".") }
+                    z++;
+                });
+            }
+            else if ($(this).children().children("tr").eq(1).children("th").size() > 0)
+            {
+                if($(this).children("caption").html() != null)
+                {
+                    title = $(this).children("caption").html();
+                }
+
+                legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
+                for(var i = 1; i < htmlData[tableIndex].context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
+                {
+                    chartData[tableIndex].series[i-1] = { name: htmlData[tableIndex].context.children[tableChildrenLength].children[i].children[0].textContent , points: []}         
+                    for(var a =  1; a < htmlData[tableIndex].context.children[tableChildrenLength].children[i].children.length; a++)
+                    {
+                        chartData[tableIndex].series[i-1].points[a-1] = { name: htmlData[tableIndex].context.children[tableChildrenLength].children[0].children[a].textContent,
+                                                                         value: htmlData[tableIndex].context.children[tableChildrenLength].children[i].children[a].textContent.replace(",", ".")}
+                    }
                 }
             }
-            
-        var tmp = '<?xml version="1.0" encoding="UTF-8"?>\
-            <anychart width="1000" height="900">\
-            <settings>\
-            <animation enabled="True" />\
-            </settings>\
-            <charts>';
-        
-        console.log("diagram-type: " + $(this).data("diagram-type") + " | diagram-orientation: " + $(this).data("diagram-orientation"));
+            else
+            {
+                tmp="";
+            }
+
         if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
         {
+            legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
             tmp +='<chart plot_type="'+$(this).data("diagram-type")+'">';
-            
         }
         else
         {
             tmp +='<chart plot_type="'+$(this).data("diagram-orientation")+'">';
         }
-        
-        
+
         tmp +='<chart_settings>\
                 <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True">\
                     <text>' + title + '</text>\
@@ -71,15 +106,13 @@ $(document).ready(function()
                         </labels>\
                         <title enabled="false"/>\
                     </x_axis>\
-                </axes>\
-            </chart_settings>';
+                </axes>';
+            tmp += legend + '</chart_settings>';
 
             if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
             {
-                tmp += ' <data_plot_settings>' ;
-                
-                tmp += '<pie_series>\
-                <label_settings>\
+                tmp += '<data_plot_settings><pie_series>\
+                <label_settings enabled = "true">\
                 <font color="White"/>\
                 <position anchor="Center" valign="Center" halign="Center"/>\
                 <format>{%YPercentOfSeries}{numDecimals:1}%</format>\
@@ -89,16 +122,7 @@ $(document).ready(function()
             }
             else if($(this).data("diagram-type") === "3D-Bar")
             {
-                tmp += ' <data_plot_settings default_series_type="Bar" enable_3d_mode="true" >' ;
-                
-                tmp += ' <bar_series>\
-                    <label_settings>\
-                        <background enabled="false" />\
-                        <position anchor="Top" valign="Top" halign="Top" />\
-                        <format>{%Value}{numDecimals:0,thousandsSeparator:.}</format>\
-                    </label_settings>\
-                    </bar_series>\
-                </data_plot_settings>';
+                tmp += ' <data_plot_settings default_series_type="Bar" enable_3d_mode="true" ></data_plot_settings>';
             }
             else
             {
@@ -140,7 +164,7 @@ $(document).ready(function()
         $(this).next().find(".anychart-svgButtons").css("width",$(this).parent().css("width"));
         $(this).next().find(".anychart-attr").css("height","400px");
         $(this).next().find(".anychart-attr").css("width",$(this).parent().css("width"));
-        
+
         $(this).remove();
         tableIndex++;
         });
