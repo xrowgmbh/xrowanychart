@@ -94,7 +94,7 @@ $(document).ready(function()
         }
 
         tmp +='<chart_settings>\
-                <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True" padding="35">\
+                <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True" padding="40">\
                     <text>' + title + '</text>\
                 </title>\
                 <chart_background>\
