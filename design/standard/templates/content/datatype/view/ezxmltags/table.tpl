@@ -12,7 +12,7 @@
 <div>
     <div class="anychart-svgButtons">
         <button class="anychart-buttonStyle ButtonIncrease" title="Vergrößern der Ansicht des Charts"><span class="fa fa-arrows-alt fa-1x"></span></button>
-    <!--<button class="anychart-buttonStyle htmltableclass" title="Die dazugehörige HTML Tabelle anzeigen"><span class="fa fa-table fa-1x"></span></button>-->
+        {*<button class="anychart-buttonStyle htmltableclass" title="Die dazugehörige HTML Tabelle anzeigen"><span class="fa fa-table fa-1x"></span></button>*}
         <form method="POST" action={"extension/download"|ezurl()}>
             <input type="hidden" name="svg" value="" />
             <button class="anychart-buttonStyle ButtonDownload" title="Das Chart als PNG downloaden"><span class="fa fa-download fa-1x"></span></button>

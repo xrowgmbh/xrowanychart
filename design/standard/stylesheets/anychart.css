@@ -94,14 +94,20 @@ area
     overflow-x: auto;
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 .anychart-svgButtons {
     position: sticky;
     z-index:99; /* In order to avoid that the buttons get behind the SVG chart */ 
-    margin-top: 20px;
+    margin-top: 40px;
     width: 110px;
     float: right;
+}
+
+.anychart > .anychart-svgButtons
+{
+    margin-top: 20px;
 }
 
 .anychart-buttonStyle {
