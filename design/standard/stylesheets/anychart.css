@@ -79,11 +79,11 @@ area
     margin: 0 0 0 2%;
 }
 
-.anychart-gridtable {
+.anychart-gridtable, .tmp_table {
     margin: 2% auto 0 auto;
 }
 
-.anychart-gridtable th, .anychart-gridtable td {
+.anychart-gridtable th, .anychart-gridtable td, .tmp_table th, .tmp_table td {
     color: black;
     padding: 0 1em;
     text-align: right;
@@ -148,4 +148,9 @@ area
 
 .anychart-tablePopup {
     background-color: #fff;
+}
+
+.tmp_table_wrapper
+{
+    display: none;
 }
