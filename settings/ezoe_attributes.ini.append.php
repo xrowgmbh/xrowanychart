@@ -1,5 +1,13 @@
 <?php /* #?ini charset="utf-8"?
 
+[CustomAttribute_table_data-diagram-height]
+Name=Diagramm Höhe 
+Title=Defines height of diagramm
+Default=400
+Type=int
+Disabled=false
+Required=false
+
 [CustomAttribute_table_data-diagram-orientation]
 Name=Diagramm Orientierung 
 Title=Defines orientation of diagramm

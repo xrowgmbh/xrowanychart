@@ -4,16 +4,17 @@
 {if and(is_set( $title ), $title)} title="{$title|wash}"{/if}
 {if and(is_set( $data-diagram-orientation ), $data-diagram-orientation)} data-diagram-orientation="{$data-diagram-orientation|wash}"{/if}
 {if and(is_set( $data-diagram-type ), $data-diagram-type)} data-diagram-type="{$data-diagram-type|wash}"{/if}
+{if and(is_set( $data-diagram-height ), $data-diagram-height)} data-diagram-height="{$data-diagram-height|wash}"{/if}
 >
 {if and(is_set( $caption ), $caption)}<caption>{$caption|htmlspecialchars_decode|wash}</caption>{/if}
 {$rows}
 </table>
 {if $classification|contains( 'diagram' )}
-<div>
+<div class="anychart-table">
     <div class="anychart-svgButtons">
         <button class="anychart-buttonStyle ButtonIncrease" title="Vergrößern der Ansicht des Charts"><span class="fa fa-arrows-alt fa-1x"></span></button>
         {*<button class="anychart-buttonStyle htmltableclass" title="Die dazugehörige HTML Tabelle anzeigen"><span class="fa fa-table fa-1x"></span></button>*}
-        <form method="POST" action={"extension/download"|ezurl()}>
+        <form method="POST" action={"anymap/download"|ezurl()}>
             <input type="hidden" name="svg" value="" />
             <button class="anychart-buttonStyle ButtonDownload" title="Das Chart als PNG downloaden"><span class="fa fa-download fa-1x"></span></button>
         </form>

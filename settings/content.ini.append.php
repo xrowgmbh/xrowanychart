@@ -2,11 +2,13 @@
 
 [table]
 AvailableClasses[]=diagram
+CustomAttributes[]=data-diagram-height
 CustomAttributes[]=data-diagram-type
 CustomAttributes[]=data-diagram-orientation
 ClassDescription[data-diagram-type]=Diagramm Typ
 ClassDescription[data-diagram-orientation]=Diagramm Orientierung
 CustomAttributesDefaults[data-diagram-type]=bar
-CustomAttributesDefaults[data-diagram-orientation]=vertical  
+CustomAttributesDefaults[data-diagram-orientation]=vertical
+CustomAttributesDefaults[data-diagram-height]=400
 
 */ ?>

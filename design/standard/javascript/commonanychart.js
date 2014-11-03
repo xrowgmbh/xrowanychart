@@ -9,12 +9,6 @@ $(document).ready(function()
 
         $(".diagram").each(function()
         {
-            var tmp = '<?xml version="1.0" encoding="UTF-8"?>\
-                <anychart width="1000" height="900">\
-                <settings>\
-                <animation enabled="True" />\
-                </settings>\
-                <charts>';
             var diagramType = $(this).data("diagram-type");
             var title = "";
             var legend = "";
@@ -24,6 +18,12 @@ $(document).ready(function()
             var tableChildrenLength = htmlData[tableIndex].context.children.length - 1;
             var z = 0;
             chartData[tableIndex] =     { series: [{ name:"", points: []}]};
+            var tmp = '<?xml version="1.0" encoding="UTF-8"?>\
+                <anychart width="1000" height="900">\
+                <settings>\
+                <animation enabled="True" />\
+                </settings>\
+                <charts>';
 
             if($(this).children("caption").html() != null)
             {
@@ -117,7 +117,7 @@ $(document).ready(function()
                 <label_settings enabled = "true">\
                 <font color="White"/>\
                 <position anchor="Center" valign="Center" halign="Center"/>\
-                <format>{%YPercentOfSeries}{numDecimals:1}%</format>\
+                <format>{%YPercentOfSeries}{decimalSeparator:\\,}%</format>\
                 </label_settings>\
                 </pie_series>\
                 </data_plot_settings>';
@@ -128,18 +128,6 @@ $(document).ready(function()
             }
             else
             {
-                /*
-                 * Bar
-                 *    3D-Bar
-                 *Line
-                 *    Spline
-                 *    StepLineForward
-                 * Area
-                 *    SplineArea
-                 *    StepLineForwardArea
-                 * Marker
-                 */
-                
                 if(diagramType === "Bar" || diagramType === "3D-Bar")
                 {
                     tooltipType = "bar";
@@ -192,7 +180,7 @@ $(document).ready(function()
         chart.write($(this).next().find(".anychart-svgChart").attr("id"));
 
         $(this).next().find(".anychart-svgButtons").css("width",$(this).parent().css("width"));
-        $(this).next().find(".anychart-attr").css("height","400px");
+        $(this).next().find(".anychart-attr").css("height",$(this).attr("data-diagram-height"));
         $(this).next().find(".anychart-attr").css("width",$(this).parent().css("width"));
 
         $(this).remove();
