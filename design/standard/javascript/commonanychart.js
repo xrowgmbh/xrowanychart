@@ -15,26 +15,28 @@ $(document).ready(function()
                 <animation enabled="True" />\
                 </settings>\
                 <charts>';
-
+            var diagramType = $(this).data("diagram-type");
             var title = "";
             var legend = "";
+            var tooltipType = "bar";
+            var labelRotation = 0;
             htmlData[htmlData.length] = $(this); //html ins DOM Objekt
             var tableChildrenLength = htmlData[tableIndex].context.children.length - 1;
             var z = 0;
             chartData[tableIndex] =     { series: [{ name:"", points: []}]};
-            
+
+            if($(this).children("caption").html() != null)
+            {
+                title = $(this).children("caption").html();
+            }
+
+            if(diagramType === "Pie" || diagramType === "Doughnut")
+            {
+                legend = ' <legend enabled="true" position="Bottom" ignore_auto_item="true" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><items><item source="Points" /></items><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
+            }
+
             if($(this).children().children("tr").eq(0).children("th").size() == 1 )
             {
-                if($(this).children("caption").html() != null)
-                {
-                    title = $(this).children("caption").html();
-                }
-                
-                if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
-                {
-                    legend = ' <legend enabled="true" position="Bottom" ignore_auto_item="true" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><items><item source="Points" /></items><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
-                }
-                
                 chartData[tableIndex].series[0].name = "Series";
                 $(this).find("th").each(function()
                 {
@@ -44,15 +46,6 @@ $(document).ready(function()
             }
             else if ($(this).children().children("tr").eq(0).children("th").size() > 1 && $(this).children().children("tr").eq(1).children("th").size() == 0)
             {
-                if($(this).children("caption").html() != null)
-                {
-                    title = $(this).children("caption").html();
-                }
-                
-                if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
-                {
-                    legend = ' <legend enabled="true" position="Bottom" ignore_auto_item="true" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><items><item source="Points" /></items><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
-                }
                 chartData[tableIndex].series[0].name = "Series";
 
                 $(this).find("th").each(function()
@@ -63,10 +56,6 @@ $(document).ready(function()
             }
             else if ($(this).children().children("tr").eq(1).children("th").size() > 0)
             {
-                if($(this).children("caption").html() != null)
-                {
-                    title = $(this).children("caption").html();
-                }
                 legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
                 
                 for(var i = 1; i < htmlData[tableIndex].context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
@@ -84,17 +73,20 @@ $(document).ready(function()
                 tmp="";
             }
 
-        if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
+        if(diagramType === "Pie" || diagramType === "Doughnut")
         {
-            tmp +='<chart plot_type="'+$(this).data("diagram-type")+'">';
+            tmp +='<chart plot_type="'+diagramType+'">';
         }
         else
         {
             tmp +='<chart plot_type="'+$(this).data("diagram-orientation")+'">';
         }
-
+        if($(this).data("diagram-orientation") == "CategorizedVertical")
+        {
+            labelRotation = 90;
+        }
         tmp +='<chart_settings>\
-                <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True" padding="40">\
+                <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True" padding="35">\
                     <text>' + title + '</text>\
                 </title>\
                 <chart_background>\
@@ -111,7 +103,7 @@ $(document).ready(function()
                         </labels>\
                     </y_axis>\
                     <x_axis>\
-                        <labels enabled="true">\
+                        <labels enabled="true" rotation="' + labelRotation + '">\
                         <format>{%Value}{numDecimals:0,thousandsSeparator:}</format>\
                         </labels>\
                         <title enabled="false"/>\
@@ -119,7 +111,7 @@ $(document).ready(function()
                 </axes>';
             tmp += legend + '</chart_settings>';
 
-            if($(this).data("diagram-type") === "Pie" || $(this).data("diagram-type") === "Doughnut")
+            if(diagramType === "Pie" || diagramType === "Doughnut")
             {
                 tmp += '<data_plot_settings><pie_series>\
                 <label_settings enabled = "true">\
@@ -130,20 +122,49 @@ $(document).ready(function()
                 </pie_series>\
                 </data_plot_settings>';
             }
-            else if($(this).data("diagram-type") === "3D-Bar")
+            else if(diagramType === "3D-Bar")
             {
                 tmp += ' <data_plot_settings default_series_type="Bar" enable_3d_mode="true" ></data_plot_settings>';
             }
             else
             {
-                tmp += ' <data_plot_settings default_series_type="'+$(this).data("diagram-type")+'">' ;
-                tmp += ' <bar_series>\
+                /*
+                 * Bar
+                 *    3D-Bar
+                 *Line
+                 *    Spline
+                 *    StepLineForward
+                 * Area
+                 *    SplineArea
+                 *    StepLineForwardArea
+                 * Marker
+                 */
+                
+                if(diagramType === "Bar" || diagramType === "3D-Bar")
+                {
+                    tooltipType = "bar";
+                }
+                else if(diagramType === "Line" || diagramType === "Spline" || diagramType === "StepLineForward")
+                {
+                    tooltipType = "line";
+                }
+                else if( diagramType === "Area" || diagramType === "SplineArea" || diagramType === "StepLineForwardArea")
+                {
+                    tooltipType = "area";
+                }
+                else if( diagramType === "Marker")
+                {
+                    tooltipType = "marker";
+                }
+                tmp += '<data_plot_settings default_series_type="'+diagramType+'">' ;
+                tmp += '<' + tooltipType + '_series>\
+                    <tooltip_settings enabled="true"><format><![CDATA[{%YValue}{numDecimals:0,thousandsSeparator:.}]]></format></tooltip_settings>\
                     <label_settings>\
                         <background enabled="false" />\
                         <position anchor="Top" valign="Top" halign="Top" />\
                         <format>{%Value}{numDecimals:0,thousandsSeparator:.}</format>\
                     </label_settings>\
-                    </bar_series>\
+                </' + tooltipType + '_series>\
                 </data_plot_settings>';
             }
         tmp += '<data>';
@@ -161,8 +182,7 @@ $(document).ready(function()
             tmp += '</series>';
         }
         tmp += '</data></chart></charts></anychart>';
-        
-        
+
         AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
         var chart = new AnyChart();
         chart.width = "100%";
@@ -195,12 +215,12 @@ $(document).ready(function()
                 var search_pattern = "#anychart-" + area_class_id;
                 $(search_pattern).closest('.embed-image_map').find(".anychart").hide();
             }
-            
+
             $( search_pattern ).each(function()
             {
                 $(this).show();
                 var id = $(this).attr('id');
-                
+
                 /* start embed code work for imagemap */
                 var id_number = id.split("-");
                 id_number = id_number[1];
@@ -216,13 +236,12 @@ $(document).ready(function()
                 }
                 var getNode = $(this);
                 var path_anychart = $.ez.root_url + $(this).data('xmlfile');
-                
-                
+
                 AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
                 var chart = new AnyChart();
                 var width_anychart;
                 var height_anychart;
-                
+
                 $.ajax({
                     type: "GET",
                     async: false,
@@ -236,16 +255,16 @@ $(document).ready(function()
                 var anychart_element = xmlDoc.getElementsByTagName('anychart');
                 //var width_anychart = anychart_element[0].getAttribute('width');
                 var height_anychart = anychart_element[0].getAttribute('height');
-    
+
                 chart.width = "100%";
                 chart.height = "100%";
                 chart.setXMLFile(path_anychart);
                 var chartContainerID = "#" + id + "_svg";
                 $(chartContainerID).css("height",height_anychart);
                 $(chartContainerID).css("width","100%");
-                
+
                 chart.write(id + "_svg");
-                
+
            });
         }
     }
@@ -272,6 +291,10 @@ $(document).ready(function()
     
     $(".htmltableclass").click(function() {
         var anychart_root = $(this).closest(".anychart");
+        if($(this).closest(".anychart").attr("class") == undefined)
+        {
+            anychart_root = $(this).closest(".anychart-table");
+        }
         anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile'));
         anychart_root.children(".anychart-tablePopup").fullScreen(true);
         anychart_root.find(".anychart-tablePopup").css("visibility","visible");
@@ -279,6 +302,10 @@ $(document).ready(function()
     
     $(".ButtonIncrease").click(function() {
         var anychart_root = $(this).closest(".anychart");
+        if($(this).closest(".anychart").attr("class") == undefined)
+        {
+            anychart_root = $(this).closest(".anychart-table");
+        }
         anychart_root.find(".anychart-svgChart").children("svg").css("background-color","white");
         anychart_root.find(".anychart-svgChart").fullScreen(true);
         anychart_root.find(".anychart-svgChart").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
@@ -287,11 +314,15 @@ $(document).ready(function()
     $( ".ButtonDownload" ).click(function() 
     {
         var anychart_root = $(this).closest(".anychart");
+        if($(this).closest(".anychart").attr("class") == undefined)
+        {
+            anychart_root = $(this).closest(".anychart-table");
+        }
         var SVGwidth = anychart_root.find(".anychart-svgChart").outerWidth();
         var SVGheight = anychart_root.find(".anychart-svgChart").outerHeight();
 
         //workaround to solve the svg access problem
-        var tmp_html = $(this).closest(".anychart").find("svg").parent().html();
+        var tmp_html = anychart_root.find("svg").parent().html();
         var beginn = tmp_html.indexOf("<defs>");
         var tmp_html = tmp_html.substr(beginn);
         var ende = tmp_html.indexOf("</svg>");
