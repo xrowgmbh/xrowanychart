@@ -1,8 +1,7 @@
 <?php 
-
 $UID = uniqid();
 $svgData = $_POST['svg'];
-
+$copyright = trim(preg_replace('/\s\s+/', ' ', $_POST['copyright']));
 try{
     if ((strpos($svgData,'<svg') && strpos($svgData,'</def') ) !== false)
     {
@@ -10,12 +9,18 @@ try{
         $svgFilename = $picturesFilepath.$UID.".svg";
         $pngFilename = $picturesFilepath.$UID.".png";
         $file=$pngFilename;
-
+        
         file_put_contents($svgFilename,$svgData);// write required data to SVG file
-
-        shell_exec("convert -density 288 " . $svgFilename . " -resize 25% " . $pngFilename ); // convert to PNG
+        if (isset ($copyright) && strlen($copyright)> 0)
+        {
+            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 '© ".$copyright."' ".$svgFilename." ".$pngFilename); // convert to PNG
+        }
+        else 
+        {
+            shell_exec("convert ".$svgFilename." ".$pngFilename); // convert to PNG
+        }
         unlink($svgFilename); // delete SVG
-
+        
         header('Content-Description: File Transfer');
         header('Content-Type: image/png'); // set MIME Type to PNG
         header('Content-Disposition: attachment; filename=chart_'.$UID);
