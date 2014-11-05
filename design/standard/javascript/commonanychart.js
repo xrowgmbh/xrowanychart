@@ -176,7 +176,7 @@ $(document).ready(function()
         chart.width = "100%";
         chart.height = "100%";
         chart.setData(tmp);
-        $(this).next().find(".anychart-svgChart").attr("id","anychart-" + Math.floor((Math.random() * 100000) + 1))
+        $(this).next().find(".anychart-svgChart").attr("id","anychart-" + Math.floor((Math.random() * 100000) + 1));
         chart.write($(this).next().find(".anychart-svgChart").attr("id"));
 
         $(this).next().find(".anychart-svgButtons").css("width",$(this).parent().css("width"));
@@ -241,7 +241,7 @@ $(document).ready(function()
                   });
 
                 var anychart_element = xmlDoc.getElementsByTagName('anychart');
-                //var width_anychart = anychart_element[0].getAttribute('width');
+                var width_anychart = anychart_element[0].getAttribute('width');
                 var height_anychart = anychart_element[0].getAttribute('height');
 
                 chart.width = "100%";
@@ -250,7 +250,16 @@ $(document).ready(function()
                 var chartContainerID = "#" + id + "_svg";
                 $(chartContainerID).css("height",height_anychart);
                 $(chartContainerID).css("width","100%");
-
+                
+                if($(this).parent().outerWidth() > width_anychart)
+                {
+                    $(chartContainerID).css("width",width_anychart);
+                    $(this).css("width",width_anychart);
+                }
+                else
+                {
+                    $(chartContainerID).css("width","100%");
+                }
                 chart.write(id + "_svg");
 
            });
