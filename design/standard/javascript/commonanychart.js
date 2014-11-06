@@ -248,24 +248,16 @@ $(document).ready(function()
                 chart.height = "100%";
                 chart.setXMLFile(path_anychart);
                 var chartContainerID = "#" + id + "_svg";
-                $(chartContainerID).css("height",height_anychart);
-                $(chartContainerID).css("width","100%");
-                
-                if($(this).parent().outerWidth() > width_anychart)
-                {
-                    $(chartContainerID).css("width",width_anychart);
-                    $(this).css("width",width_anychart);
-                }
-                else
-                {
-                    $(chartContainerID).css("width","100%");
-                }
+
+                $(chartContainerID).css("height",height_anychart + "px");
+                $(this).css("max-width",width_anychart + "px");
+
                 chart.write(id + "_svg");
 
            });
         }
     }
-    
+
     //initial loading
     $('img[usemap]').rwdImageMaps();
     load_anycharts(false, "");
