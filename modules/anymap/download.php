@@ -9,6 +9,8 @@
 $contentObjectID = $Params['ContentObjectID'];
 $contentObjectAttributeID = $Params['ContentObjectAttributeID'];
 $contentObject = eZContentObject::fetch( $contentObjectID );
+$Module = $Params['Module'];
+
 if ( !is_object( $contentObject ) )
 {
     return $Module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
@@ -16,9 +18,13 @@ if ( !is_object( $contentObject ) )
 $currentVersion = $contentObject->attribute( 'current_version' );
 
 if ( isset(  $Params['Version'] ) && is_numeric( $Params['Version'] ) )
-     $version = $Params['Version'];
-else
-     $version = $currentVersion;
+{
+    $version = $Params['Version'];
+}
+ else
+{
+    $version = $currentVersion;
+}
 
 $contentObjectAttribute = eZContentObjectAttribute::fetch( $contentObjectAttributeID, $version, true );
 if ( !is_object( $contentObjectAttribute ) )
