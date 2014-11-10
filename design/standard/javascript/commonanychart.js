@@ -160,11 +160,11 @@ $(document).ready(function()
         // for all series
         for(var i = 0; i < chartData[tableIndex].series.length ; i++)
         {
-            tmp += '<series name="'+chartData[tableIndex].series[i].name+'">';
+            tmp += '<series name="'+chartData[tableIndex].series[i].name.replace(/&nbsp;/g, ' ')+'">';
             // for all points
             for(var a =  0; a < chartData[tableIndex].series[i].points.length ; a++)
             {
-                tmp += '<point name="'+chartData[tableIndex].series[i].points[a].name+' " y=" '+ chartData[tableIndex].series[i].points[a].value + ' "/> ';
+                tmp += '<point name="'+chartData[tableIndex].series[i].points[a].name.replace(/&nbsp;/g, ' ')+' " y=" '+ chartData[tableIndex].series[i].points[a].value.replace(/&nbsp;/g, ' ') + ' "/> ';
             }
 
             tmp += '</series>';
