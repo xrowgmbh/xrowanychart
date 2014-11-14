@@ -206,7 +206,6 @@ $(document).ready(function()
 
             $( search_pattern ).each(function()
             {
-                $(this).show();
                 var id = $(this).attr('id');
 
                 /* start embed code work for imagemap */
@@ -218,10 +217,7 @@ $(document).ready(function()
                     $(this).hide();
                     return true;
                 }
-                else
-                {
-                    $(this).show();
-                }
+
                 var getNode = $(this);
                 var path_anychart = $.ez.root_url + $(this).data('xmlfile');
 
@@ -239,6 +235,17 @@ $(document).ready(function()
                       xmlDoc=data;
                     }
                   });
+
+                //error message when the xml can not be opened(permission for example)
+                if (typeof xmlDoc === 'undefined') {
+                    $(this).hide();
+                    $( "<p>You do not have permission to view this object</p>" ).insertAfter(this);
+                    return false;
+                }
+                else
+                {
+                    $(this).show();
+                }
 
                 var anychart_element = xmlDoc.getElementsByTagName('anychart');
                 var width_anychart = anychart_element[0].getAttribute('width');

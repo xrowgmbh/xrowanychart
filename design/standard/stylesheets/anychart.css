@@ -154,3 +154,8 @@ area
 {
     display: none;
 }
+
+.error_text
+{
+    text-align: center;
+}
