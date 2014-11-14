@@ -239,7 +239,7 @@ $(document).ready(function()
                 //error message when the xml can not be opened(permission for example)
                 if (typeof xmlDoc === 'undefined') {
                     $(this).hide();
-                    $( "<p class="error_text">You do not have permission to view this object</p>" ).insertAfter(this);
+                    $( '<p class="error_text">You do not have permission to view this object</p>' ).insertAfter(this);
                     return false;
                 }
                 else
