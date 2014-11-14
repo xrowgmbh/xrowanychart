@@ -160,11 +160,11 @@ $(document).ready(function()
         // for all series
         for(var i = 0; i < chartData[tableIndex].series.length ; i++)
         {
-            tmp += '<series name="'+chartData[tableIndex].series[i].name+'">';
+            tmp += '<series name="'+chartData[tableIndex].series[i].name.replace(/&nbsp;/g, ' ')+'">';
             // for all points
             for(var a =  0; a < chartData[tableIndex].series[i].points.length ; a++)
             {
-                tmp += '<point name="'+chartData[tableIndex].series[i].points[a].name+' " y=" '+ chartData[tableIndex].series[i].points[a].value + ' "/> ';
+                tmp += '<point name="'+chartData[tableIndex].series[i].points[a].name.replace(/&nbsp;/g, ' ')+' " y=" '+ chartData[tableIndex].series[i].points[a].value.replace(/&nbsp;/g, ' ') + ' "/> ';
             }
 
             tmp += '</series>';
@@ -248,24 +248,16 @@ $(document).ready(function()
                 chart.height = "100%";
                 chart.setXMLFile(path_anychart);
                 var chartContainerID = "#" + id + "_svg";
-                $(chartContainerID).css("height",height_anychart);
-                $(chartContainerID).css("width","100%");
-                
-                if($(this).parent().outerWidth() > width_anychart)
-                {
-                    $(chartContainerID).css("width",width_anychart);
-                    $(this).css("width",width_anychart);
-                }
-                else
-                {
-                    $(chartContainerID).css("width","100%");
-                }
+
+                $(chartContainerID).css("height",height_anychart + "px");
+                $(this).css("max-width",width_anychart + "px");
+
                 chart.write(id + "_svg");
 
            });
         }
     }
-    
+
     //initial loading
     $('img[usemap]').rwdImageMaps();
     load_anycharts(false, "");
