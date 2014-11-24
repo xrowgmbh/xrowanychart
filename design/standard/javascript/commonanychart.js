@@ -117,7 +117,7 @@ $(document).ready(function()
                 <label_settings enabled = "true">\
                 <font color="White"/>\
                 <position anchor="Center" valign="Center" halign="Center"/>\
-                <format>{%YPercentOfSeries}{decimalSeparator:\\,}%</format>\
+                    <format>{%Value}{thousandsSeparator:,decimalSeparator:\\,}</format>\
                 </label_settings>\
                 </pie_series>\
                 </data_plot_settings>';
@@ -282,6 +282,7 @@ $(document).ready(function()
             $(this).find(".anychart-tablePopup").css("visibility","hidden");
             $(this).find(".anychart-svgChart").children("svg").css("background-color", "transparent");
             $(this).find(".anychart-tablePopup").html("");
+            $(this).find("#tmp_svg").remove();
         }
     });
     
@@ -300,16 +301,33 @@ $(document).ready(function()
         anychart_root.children(".anychart-tablePopup").fullScreen(true);
         anychart_root.find(".anychart-tablePopup").css("visibility","visible");
     });
-    
-    $(".ButtonIncrease").click(function() {
+
+    $(".ButtonIncrease").click(function() 
+    {
         var anychart_root = $(this).closest(".anychart");
         if($(this).closest(".anychart").attr("class") == undefined)
         {
             anychart_root = $(this).closest(".anychart-table");
+            anychart_root.find(".anychart-svgChart").children("svg").css("background-color","white");
+            anychart_root.find(".anychart-svgChart").fullScreen(true);
+            anychart_root.find(".anychart-svgChart").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
         }
-        anychart_root.find(".anychart-svgChart").children("svg").css("background-color","white");
-        anychart_root.find(".anychart-svgChart").fullScreen(true);
-        anychart_root.find(".anychart-svgChart").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
+        else
+        {
+            anychart_root.find(".anychart-attr").append('<div id="tmp_svg"/>');
+            anychart_root.find("#tmp_svg").fullScreen(true);
+
+            AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
+            var chart = new AnyChart();
+            chart.width = "96%";
+            chart.height = "96%";
+            chart.setXMLFile($.ez.root_url + anychart_root.data('xmlfile'));
+            chart.write("tmp_svg");
+
+            anychart_root.find("#tmp_svg").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
+            anychart_root.find("#tmp_svg").css("background-color","white");
+            anychart_root.find("#tmp_svg").css("visibility","visible");
+        }
     });
 
     $( ".ButtonDownload" ).click(function() 
