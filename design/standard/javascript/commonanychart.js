@@ -347,13 +347,13 @@ $(document).ready(function()
         var ende = tmp_html.indexOf("</svg>");
         var SVGhtml = tmp_html.substr(0, ende);
         var copyright = anychart_root.data("copyright");
-        
+        var source = anychart_root.data("source");
         var SVGstring = "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" + 
                         "<svg width=\"" + SVGwidth +"\" height=\"" + SVGheight + "\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\">" + SVGhtml +"</svg>";
         SVGstring = SVGstring.replace(/#ac_/g, "Xac_"); // replace invalid '#' characters
         anychart_root.find("input[name='svg']").attr("value", SVGstring);
         anychart_root.find("input[name='copyright']").attr("value", copyright);
-
+        anychart_root.find("input[name='source']").attr("value", source);
     });
 
     $.fn.createTable = function(xml) 
