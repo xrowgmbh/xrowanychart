@@ -2,6 +2,7 @@
 $UID = uniqid();
 $svgData = $_POST['svg'];
 $copyright = trim(preg_replace('/\s\s+/', ' ', $_POST['copyright']));
+$source = trim(preg_replace('/\s\s+/', ' ', $_POST['source']));
 try{
     if ((strpos($svgData,'<svg') && strpos($svgData,'</def') ) !== false)
     {
@@ -11,14 +12,24 @@ try{
         $file=$pngFilename;
         
         file_put_contents($svgFilename,$svgData);// write required data to SVG file
-        if (isset ($copyright) && strlen($copyright)> 0)
+
+        if(strlen($copyright)> 0 && strlen($source)> 0)
         {
-            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 '© ".$copyright."' ".$svgFilename." ".$pngFilename); // convert to PNG
+            shell_exec("convert -splice 0x32 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 'Quelle: " . $source . "\n© ".$copyright."' ".$svgFilename." ".$pngFilename);
+        }
+        elseif(strlen($copyright)> 0 && !strlen($source)> 0)
+        {
+            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 '© ".var_dump($source).$copyright."' ".$svgFilename." ".$pngFilename);
+        }
+        elseif(strlen(!$copyright)> 0 && strlen($source)> 0)
+        {
+            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 'Quelle: ".$source."' ".$svgFilename." ".$pngFilename);
         }
         else 
         {
-            shell_exec("convert ".$svgFilename." ".$pngFilename); // convert to PNG
+            shell_exec("convert ".$svgFilename." ".$pngFilename);
         }
+
         unlink($svgFilename); // delete SVG
         
         header('Content-Description: File Transfer');
