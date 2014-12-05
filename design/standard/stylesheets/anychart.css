@@ -155,6 +155,8 @@ area
 
 #tmp_svg{
     padding: 2%;
+    width: 96%;
+    height: 96%;
 }
 
 .anychart-diagram-source{
@@ -167,4 +169,35 @@ area
 
 .anychart-diagram-caption > p{
     margin-bottom: 0px;
+}
+
+.anychart-popup{
+    z-index: 1001;
+    display: none;
+    position: absolute;
+    background-color: #eee;
+    max-width: 930px;
+    width: 100%;
+    padding: 15px;
+}
+
+#anychart-popup-background{
+    background: black;
+    opacity: 0.7;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.anychart-popup-close{
+    width: 21px;
+    height: 21px;
+    float:right;
+    margin: -8px;
+    color: #777777;
+    cursor: pointer;
 }

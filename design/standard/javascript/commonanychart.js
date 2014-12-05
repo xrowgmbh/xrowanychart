@@ -1,6 +1,10 @@
 /* AnyChart and AnyMap*/ 
 $(document).ready(function()
 {
+        set_popup_position();
+        $(window).resize(function(){
+            set_popup_position();
+        });
     if($(".diagram").length>0)
     {
         var htmlData = [];
@@ -257,9 +261,20 @@ $(document).ready(function()
                 var chartContainerID = "#" + id + "_svg";
 
                 $(chartContainerID).css("height",height_anychart + "px");
-                $(this).css("max-width",width_anychart + "px");
-
-                chart.write(id + "_svg");
+                if(imagemap_click == true)
+                {
+                    $(this).css("max-width",width_anychart + "px");
+                }
+                else
+                {
+                    $(this).css("max-width",width_anychart + "px");
+                }
+                
+                if(!($("#" + id + "_svg").has("svg").length > 0))
+                {
+                    chart.write(id + "_svg");
+                }
+                
 
            });
         }
@@ -274,6 +289,30 @@ $(document).ready(function()
         load_anycharts(true, $(this).attr('class'));
         
     });
+    $( "area[class^='popup']" ).on('click', function() {
+        load_anycharts(true, $(this).attr('class'));
+
+        // get the chart id
+        var search_pattern = "#anychart-" + $(this).attr('class').split("_")[1];
+        
+        $(search_pattern).parent().css("max-width",$(search_pattern).css("max-width"));
+        set_popup_position();
+        $("#anychart-popup-background").fadeIn("slow");
+        $(search_pattern).parent().fadeIn("normal").css({"top": parseInt( $(window).scrollTop() + 30) + "px"});
+    });
+    
+    function set_popup_position(){
+        $("#debug").remove();
+        var left = 0;
+        
+        var offset = ($(window).outerWidth() - $(".anychart-popup").outerWidth())/2;
+        if(offset < 0)
+        {
+            var offset = 0;
+        }
+        $(".anychart-popup").css({"width": $("#page").outerWidth() - 30});
+        $(".anychart-popup").css({"left": parseInt(offset)  + "px"});
+    }
     
     $(document).bind("fullscreenchange", function() {
         if($(document).fullScreen() == false)
@@ -284,6 +323,16 @@ $(document).ready(function()
             $(this).find(".anychart-tablePopup").html("");
             $(this).find("#tmp_svg").remove();
         }
+    });
+    
+    $("#anychart-popup-background").click(function() {
+        $("#anychart-popup-background").fadeOut("normal");
+        $(".anychart-popup").fadeOut("normal");
+    });
+    
+    $(".anychart-popup-close").click(function() {
+            $("#anychart-popup-background").fadeOut("normal");
+            $(".anychart-popup").fadeOut("normal");
     });
     
     $(".htmltableclass").click(function() {
@@ -327,6 +376,7 @@ $(document).ready(function()
             anychart_root.find("#tmp_svg").append("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button>");
             anychart_root.find("#tmp_svg").css("background-color","white");
             anychart_root.find("#tmp_svg").css("visibility","visible");
+
         }
     });
 
