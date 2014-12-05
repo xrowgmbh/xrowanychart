@@ -314,7 +314,7 @@ $(document).ready(function()
         }
         else
         {
-            anychart_root.find(".anychart-attr").append('<div id="tmp_svg"/>');
+            anychart_root.append('<div id="tmp_svg"/>');
             anychart_root.find("#tmp_svg").fullScreen(true);
 
             AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
