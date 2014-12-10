@@ -300,8 +300,12 @@ $(document).ready(function()
         $(search_pattern).parent().fadeIn("normal").css({"top": parseInt( $(window).scrollTop() + 30) + "px"});
     });
     
-    function set_popup_position( id ="resize" )
-	{
+    function set_popup_position( id )
+    {
+        if(id === undefined)
+        {
+          id = "resize";
+        }
         $("#debug").remove();
         if(id == "resize")
         {
