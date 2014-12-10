@@ -15,6 +15,12 @@
         <button class="anychart-buttonStyle htmltableclass" title="Die dazugehörige HTML Tabelle anzeigen"><span class="fa fa-table fa-1x"></span></button>
         <form method="POST" action={"anymap/download"|ezurl()}>
             <input type="hidden" name="svg" value="" />
+            {if is_set($copyright)}
+                <input type="hidden" name="copyright" value="{$copyright}" />
+            {/if}
+            {if is_set($source)}
+                <input type="hidden" name="source" value="{$source}" />
+            {/if}
             <button class="anychart-buttonStyle ButtonDownload" title="Das Chart als PNG downloaden"><span class="fa fa-download fa-1x"></span></button>
         </form>
     </div>
@@ -36,5 +42,10 @@
             <span class="fa fa-times fa-1x"></span>
         </button>
     </div>
+    {if is_set($source)}
+        <div class="anychart-diagram-source">
+            <span>Quelle: {$source}</span>
+        </div>
+     {/if}
 </div>
 {/if}

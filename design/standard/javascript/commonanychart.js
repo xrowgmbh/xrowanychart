@@ -1,7 +1,6 @@
 /* AnyChart and AnyMap*/ 
 $(document).ready(function()
 {
-        set_popup_position();
         $(window).resize(function(){
             set_popup_position();
         });
@@ -296,22 +295,41 @@ $(document).ready(function()
         var search_pattern = "#anychart-" + $(this).attr('class').split("_")[1];
         
         $(search_pattern).parent().css("max-width",$(search_pattern).css("max-width"));
-        set_popup_position();
+        set_popup_position( search_pattern );
         $("#anychart-popup-background").fadeIn("slow");
         $(search_pattern).parent().fadeIn("normal").css({"top": parseInt( $(window).scrollTop() + 30) + "px"});
     });
     
-    function set_popup_position(){
+    function set_popup_position( id ="resize" )
+	{
         $("#debug").remove();
+        if(id == "resize")
+        {
+             var myid="#" + $(".anychart-popup").filter(":visible").find(".anychart").attr("id");
+        }
+        else
+        {
+            var myid=id;
+        }
+        if( myid == undefined)
+        {
+            return true;
+        }
         var left = 0;
-        
-        var offset = ($(window).outerWidth() - $(".anychart-popup").outerWidth())/2;
+        if( ($("#page").outerWidth()) > parseInt($(myid).parent().css("max-width"),10) )
+        {
+            var offset = ($(window).outerWidth() - 25 - parseInt(($(myid).parent().css("max-width"))) )/2;
+        }
+        else
+        {
+            var offset = ($(window).outerWidth() - parseInt($(myid).parent().outerWidth()) )/2;
+        }
         if(offset < 0)
         {
             var offset = 0;
         }
-        $(".anychart-popup").css({"width": $("#page").outerWidth() - 30});
-        $(".anychart-popup").css({"left": parseInt(offset)  + "px"});
+        $(myid).parent().css({"width": $("#page").outerWidth() - 30});
+        $(myid).parent().css({"left": parseInt(offset)  + "px"});
     }
     
     $(document).bind("fullscreenchange", function() {

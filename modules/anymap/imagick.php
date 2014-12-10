@@ -19,9 +19,9 @@ try{
         }
         elseif(strlen($copyright)> 0 && !strlen($source)> 0)
         {
-            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 '© ".var_dump($source).$copyright."' ".$svgFilename." ".$pngFilename);
+            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 '© ".$copyright."' ".$svgFilename." ".$pngFilename);
         }
-        elseif(strlen(!$copyright)> 0 && strlen($source)> 0)
+        elseif(!strlen($copyright)> 0 && strlen($source)> 0)
         {
             shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 'Quelle: ".$source."' ".$svgFilename." ".$pngFilename);
         }
