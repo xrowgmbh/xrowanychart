@@ -5,22 +5,20 @@ $(document).ready(function()
             set_popup_position();
         });
     if($(".diagram").length>0)
-    {
-        var htmlData = [];
-        var chartData = [];
-        var tableIndex = 0;
-
+    { 
         $(".diagram").each(function()
         {
+            var chartData = [];
+            var tableIndex = 0;
             var diagramType = $(this).data("diagram-type");
             var title = "";
             var legend = "";
             var tooltipType = "bar";
             var labelRotation = 0;
-            htmlData[htmlData.length] = $(this); //html ins DOM Objekt
-            var tableChildrenLength = htmlData[tableIndex].context.children.length - 1;
+            var htmlData = $(this); //html ins DOM Objekt
+            var tableChildrenLength = htmlData.context.children.length - 1;
             var z = 0;
-            chartData[tableIndex] =     { series: [{ name:"", points: []}]};
+            chartData[tableIndex] = { series: [{ name:"", points: []}]};
             var tmp = '<?xml version="1.0" encoding="UTF-8"?>\
                 <anychart width="1000" height="900">\
                 <settings>\
@@ -61,20 +59,20 @@ $(document).ready(function()
             {
                 legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
                 
-                for(var i = 1; i < htmlData[tableIndex].context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
+                for(var i = 1; i < htmlData.context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
                 {
-                    chartData[tableIndex].series[i-1] = { name: htmlData[tableIndex].context.children[tableChildrenLength].children[i].children[0].textContent , points: []}         
-                    for(var a =  1; a < htmlData[tableIndex].context.children[tableChildrenLength].children[i].children.length; a++)
+                    chartData[tableIndex].series[i-1] = { name: htmlData.context.children[tableChildrenLength].children[i].children[0].textContent , points: []}         
+                    for(var a =  1; a < htmlData.context.children[tableChildrenLength].children[i].children.length; a++)
                     {
-                        chartData[tableIndex].series[i-1].points[a-1] = { name: htmlData[tableIndex].context.children[tableChildrenLength].children[0].children[a].textContent,
-                                                                         value: htmlData[tableIndex].context.children[tableChildrenLength].children[i].children[a].textContent.replace(",", ".")}
+                        chartData[tableIndex].series[i-1].points[a-1] = { name: htmlData.context.children[tableChildrenLength].children[0].children[a].textContent,
+                                                                         value: htmlData.context.children[tableChildrenLength].children[i].children[a].textContent.replace(",", ".")}
                     }
                 }
             }
             else
             {
                 tmp="";
-            }
+            }     
 
         if(diagramType === "Pie" || diagramType === "Doughnut")
         {
@@ -88,6 +86,36 @@ $(document).ready(function()
         {
             labelRotation = 90;
         }
+        
+        tmp +='<styles> \
+            <' + getSeriesType(diagramType) + '_style name="flat"> \
+            <fill type="Solid"  opacity="1" />';
+        
+        if(diagramType === "Marker")
+            {
+            
+            }
+        else
+        {
+            tmp +='<border enabled="false"/>';    
+        }
+            tmp +='<states> \
+                <hover>  \
+                    <line color="#cccccc" opacity="1" />\
+                </hover>\
+                <selected_normal>\
+                    <line color="#cccccc" opacity="1" />\
+                </selected_normal>\
+                <selected_hover>\
+                    <line color="#cccccc" opacity="1" /> \
+                </selected_hover> \
+                <pushed> \
+                    <line color="#cccccc" opacity="1" /> \
+                    </pushed> \
+            </states> \
+            </' + getSeriesType(diagramType) + '_style> \
+        </styles>';
+		
         tmp +='<chart_settings>\
                 <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True" padding="35">\
                     <text>' + title + '</text>\
@@ -114,9 +142,9 @@ $(document).ready(function()
                 </axes>';
             tmp += legend + '</chart_settings>';
 
-            if(diagramType === "Pie" || diagramType === "Doughnut")
+            if(getSeriesType(diagramType) === "pie")
             {
-                tmp += '<data_plot_settings><pie_series>\
+                tmp += '<data_plot_settings><pie_series style="flat">\
                 <label_settings enabled = "true">\
                 <font color="White"/>\
                 <position anchor="Center" valign="Center" halign="Center"/>\
@@ -127,39 +155,23 @@ $(document).ready(function()
             }
             else if(diagramType === "3D-Bar")
             {
-                tmp += ' <data_plot_settings default_series_type="Bar" enable_3d_mode="true" ></data_plot_settings>';
+                tmp += ' <data_plot_settings default_series_type="Bar" enable_3d_mode="true" ><bar_series style="flat"></bar_series></data_plot_settings>';
             }
             else
             {
-                if(diagramType === "Bar" || diagramType === "3D-Bar")
-                {
-                    tooltipType = "bar";
-                }
-                else if(diagramType === "Line" || diagramType === "Spline" || diagramType === "StepLineForward")
-                {
-                    tooltipType = "line";
-                }
-                else if( diagramType === "Area" || diagramType === "SplineArea" || diagramType === "StepLineForwardArea")
-                {
-                    tooltipType = "area";
-                }
-                else if( diagramType === "Marker")
-                {
-                    tooltipType = "marker";
-                }
-                tmp += '<data_plot_settings default_series_type="'+diagramType+'">' ;
-                tmp += '<' + tooltipType + '_series>\
+                tmp += '<data_plot_settings default_series_type="'+getSeriesType(diagramType)+'">' ;
+                tmp += '<' + getSeriesType(diagramType) + '_series style="flat">\
                     <tooltip_settings enabled="true"><format><![CDATA[{%YValue}{numDecimals:0,thousandsSeparator:.}]]></format></tooltip_settings>\
                     <label_settings>\
                         <background enabled="false" />\
                         <position anchor="Top" valign="Top" halign="Top" />\
                         <format>{%Value}{numDecimals:0,thousandsSeparator:.}</format>\
                     </label_settings>\
-                </' + tooltipType + '_series>\
+                </' + getSeriesType(diagramType) + '_series>\
                 </data_plot_settings>';
             }
         tmp += '<data>';
-
+        
         // for all series
         for(var i = 0; i < chartData[tableIndex].series.length ; i++)
         {
@@ -173,7 +185,7 @@ $(document).ready(function()
             tmp += '</series>';
         }
         tmp += '</data></chart></charts></anychart>';
-
+        
         AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
         var chart = new AnyChart();
         chart.width = "100%";
@@ -187,10 +199,34 @@ $(document).ready(function()
         $(this).next().find(".anychart-attr").css("width",$(this).parent().css("width"));
 
         $(this).remove();
-        tableIndex++;
         });
     }
-
+  
+    function getSeriesType ( type )
+    {
+        console.log(type);
+        if(type === "Pie" || type === "Doughnut")
+        {
+            seriesType = "pie";
+        }
+        else if(type === "Bar" || type === "3D-Bar")
+        {
+            seriesType = "bar";
+        }
+        else if(type === "Line" || type === "spline" || type === "StepLineForward")
+        {
+            seriesType = "line";
+        }
+        else if( type === "area" || type === "SplineArea" || type === "StepLineForwardArea")
+        {
+            seriesType = "area";
+        }
+        else if( type === "Marker")
+        {
+            seriesType = "marker";
+        }
+        return seriesType;
+    }
     function load_anycharts( imagemap_click, class_name )
     {
         if($(".anychart").length>0)
