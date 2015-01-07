@@ -56,6 +56,10 @@ area
     height:auto;
     margin-top: 1% ;
     width: 100%;
+    position: relative;
+}
+.anychart-table{
+    position: relative;
 }
 
 #flash_warning{
@@ -91,16 +95,17 @@ area
 }
 
 .anychart-svgButtons {
-    position: sticky;
+    position: absolute;
     z-index:99; /* In order to avoid that the buttons get behind the SVG chart */ 
-    margin-top: 40px;
+    top: 20px;
+    right: 0;
     width: 110px;
     float: right;
 }
 
-.anychart > .anychart-svgButtons
+.anychart-table > .anychart-svgButtons
 {
-    margin-top: 20px;
+    top: 38px;
 }
 
 .anychart-buttonStyle {
