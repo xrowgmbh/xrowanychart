@@ -4,6 +4,7 @@ PolicyOmitList[]=anymap/maps
 PolicyOmitList[]=anymap/xml
 PolicyOmitList[]=extension/xrowanychart
 PolicyOmitList[]=anymap/download
+PolicyOmitList[]=anymap/excel
 
 [RegionalSettings]
 TranslationExtensions[]=xrowanychart
