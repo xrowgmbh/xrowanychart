@@ -6,209 +6,212 @@ $(document).ready(function()
         });
     if($(".diagram").length>0)
     { 
+
         $(".diagram").each(function()
         {
-            AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
-            var chart = new AnyChart();
-            chart.width = "100%";
-            chart.height = "100%";
-
-            chart.setData(buildXML($(this)));
-
-            $(this).next().find(".anychart-svgChart").attr("id","anychart-" + Math.floor((Math.random() * 100000) + 1));
-            chart.write($(this).next().find(".anychart-svgChart").attr("id"));
-
-            $(this).next().find(".anychart-svgButtons").css("width",$(this).parent().css("width"));
-            $(this).next().find(".anychart-attr").css("height",$(this).attr("data-diagram-height"));
-            $(this).next().find(".anychart-attr").css("width",$(this).parent().css("width"));
-            $(this).remove();
-        });
-    }
-
-    function getChartDataAsJSON ( data )
-    {
-        var chartData = chartData = {series: [{ name:"", points: []}]};
-        var z = 0;
-        var dataLength = data.context.children.length - 1;
-        if(data.children().children("tr").eq(0).children("th").size() == 1 ) //vertical chart
-        {
-            chartData.series[0].name = "Series";
-            data.find("th").each(function()
-            {
-                chartData.series[0].points[z] = {name: $(this).html(), value: $(this).next().html().replace(",", ".") }
-                z++;
-            });
-        }
-        else if (data.children().children("tr").eq(0).children("th").size() > 1 && data.children().children("tr").eq(1).children("th").size() == 0) //horizontal chart
-        {
-            chartData.series[0].name = "Series";
-            data.find("th").each(function()
-            {
-                chartData.series[0].points[z] = {name: $(this).html(), value: $(this).parent().next().children().eq(z).html().replace(",", ".") }
-                z++;
-            });
-        }
-        else if (data.children().children("tr").eq(1).children("th").size() > 0) //chart with multiple series
-        {
-            for(var i = 1; i < data.context.children[dataLength].children.length; i++)
-            {
-                chartData.series[i-1] = { name: data.context.children[dataLength].children[i].children[0].textContent , points: []}
-                for(var a =  1; a < data.context.children[dataLength].children[i].children.length; a++)
-                {
-                    chartData.series[i-1].points[a-1] = { name: data.context.children[dataLength].children[0].children[a].textContent,
-                                                         value: data.context.children[dataLength].children[i].children[a].textContent.replace(",", ".")}
-                }
-            }
-        }
-        else
-        {
-            chartData = false;
-        }
-        return chartData;
-    }
-
-    function buildXML (data)
-    {
-        if (getChartDataAsJSON(data) != false)
-        {
-            var diagramType = data.data("diagram-type");
-            var title = data.children("caption").html();
-            var orientation = data.data("diagram-orientation");
-            var chartData = getChartDataAsJSON(data);
-            var type = getSeriesType(diagramType);
-            var legend = '<legend enabled="false" />';
+           
+            var chartData = [];
+            var tableIndex = 0;
+            var diagramType = $(this).data("diagram-type");
+            var title = "";
+            var legend = "";
+            var tooltipType = "bar";
             var labelRotation = 0;
-            var border = false;
+            var htmlData = $(this); //html ins DOM Objekt
+            var tableChildrenLength = htmlData.context.children.length - 1;
+            var z = 0;
+            chartData[tableIndex] = { series: [{ name:"", points: []}]};
+            var tmp = '<?xml version="1.0" encoding="UTF-8"?>\
+                <anychart width="1000" height="900">\
+                <settings>\
+                <animation enabled="True" />\
+                </settings>\
+                <charts>';
 
-            if(type === "pie")
+            if($(this).children("caption").html() != null)
             {
-                plottype = diagramType;
-                data_plot_settings = '<data_plot_settings><pie_series style="flat">\
-                    <label_settings enabled = "true">\
-                    <font color="White"/>\
-                    <position anchor="Center" valign="Center" halign="Center"/>\
-                        <format>{%Value}{thousandsSeparator:,decimalSeparator:\\,}</format>\
-                    </label_settings>\
-                    </pie_series>\
-                    </data_plot_settings>';
+                title = $(this).children("caption").html();
+            }
+
+            if(diagramType === "Pie" || diagramType === "Doughnut")
+            {
                 legend = ' <legend enabled="true" position="Bottom" ignore_auto_item="true" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><items><item source="Points" /></items><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
             }
-            else if(diagramType === "3D-Bar")
+
+            if($(this).children().children("tr").eq(0).children("th").size() == 1 )
             {
-                plottype = orientation;
-                data_plot_settings = '<data_plot_settings default_series_type="Bar" enable_3d_mode="true"/>';
-                if (chartData.series.length > 1)
+                chartData[tableIndex].series[0].name = "Series";
+                $(this).find("th").each(function()
                 {
-                    legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
+                    chartData[tableIndex].series[0].points[z] = {name: $(this).html(), value: $(this).next().html().replace(",", ".") }
+                    z++;
+                });
+            }
+            else if ($(this).children().children("tr").eq(0).children("th").size() > 1 && $(this).children().children("tr").eq(1).children("th").size() == 0)
+            {
+                chartData[tableIndex].series[0].name = "Series";
+
+                $(this).find("th").each(function()
+                {
+                    chartData[tableIndex].series[0].points[z] = {name: $(this).html(), value: $(this).parent().next().children().eq(z).html().replace(",", ".") }
+                    z++;
+                });
+            }
+            else if ($(this).children().children("tr").eq(1).children("th").size() > 0)
+            {
+                legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
+                
+                for(var i = 1; i < htmlData.context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
+                {
+                    chartData[tableIndex].series[i-1] = { name: htmlData.context.children[tableChildrenLength].children[i].children[0].textContent , points: []}         
+                    for(var a =  1; a < htmlData.context.children[tableChildrenLength].children[i].children.length; a++)
+                    {
+                        chartData[tableIndex].series[i-1].points[a-1] = { name: htmlData.context.children[tableChildrenLength].children[0].children[a].textContent,
+                                                                         value: htmlData.context.children[tableChildrenLength].children[i].children[a].textContent.replace(",", ".")}
+                    }
                 }
             }
             else
             {
-                plottype = orientation;
-                data_plot_settings = '<data_plot_settings default_series_type="'+ type +'">\
-                <' + type + '_series style="flat">\
+                tmp="";
+            }
+            
+        
+
+        if(diagramType === "Pie" || diagramType === "Doughnut")
+        {
+            tmp +='<chart plot_type="'+diagramType+'">';
+        }
+        else
+        {
+            tmp +='<chart plot_type="'+$(this).data("diagram-orientation")+'">';
+        }
+        if($(this).data("diagram-orientation") == "CategorizedVertical")
+        {
+            labelRotation = 90;
+        }
+        
+        tmp +='<styles> \
+            <' + getSeriesType(diagramType) + '_style name="flat"> \
+            <fill type="Solid"  opacity="1" />';
+        
+        if(diagramType === "Marker")
+            {
+            
+            }
+        else
+        {
+            tmp +='<border enabled="false"/>';    
+        }
+            tmp +='<states> \
+                <hover>  \
+                    <line color="#cccccc" opacity="1" />\
+                </hover>\
+                <selected_normal>\
+                    <line color="#cccccc" opacity="1" />\
+                </selected_normal>\
+                <selected_hover>\
+                    <line color="#cccccc" opacity="1" /> \
+                </selected_hover> \
+                <pushed> \
+                    <line color="#cccccc" opacity="1" /> \
+                    </pushed> \
+            </states> \
+            </' + getSeriesType(diagramType) + '_style> \
+        </styles>';
+        
+        tmp +='<chart_settings>\
+                <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True" padding="35">\
+                    <text>' + title + '</text>\
+                </title>\
+                <chart_background>\
+                    <border enabled="false" />\
+                    <inside_margin left="0" top="0" right="0" bottom="0" all="0" /> \
+                    <fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" />\
+                    <effects enabled="false" />\
+                </chart_background>\
+                <axes>\
+                    <y_axis >\
+                        <title enabled="false"/>\
+                        <labels>\
+                            <format>{%Value}{numDecimals:0,thousandsSeparator:}</format>\
+                        </labels>\
+                    </y_axis>\
+                    <x_axis>\
+                        <labels enabled="true" rotation="' + labelRotation + '">\
+                        <format>{%Value}{numDecimals:0,thousandsSeparator:}</format>\
+                        </labels>\
+                        <title enabled="false"/>\
+                    </x_axis>\
+                </axes>';
+            tmp += legend + '</chart_settings>';
+
+            if(getSeriesType(diagramType) === "pie")
+            {
+                tmp += '<data_plot_settings><pie_series style="flat">\
+                <label_settings enabled = "true">\
+                <font color="White"/>\
+                <position anchor="Center" valign="Center" halign="Center"/>\
+                    <format>{%Value}{thousandsSeparator:,decimalSeparator:\\,}</format>\
+                </label_settings>\
+                </pie_series>\
+                </data_plot_settings>';
+            }
+            else if(diagramType === "3D-Bar")
+            {
+                tmp += ' <data_plot_settings default_series_type="Bar" enable_3d_mode="true" ><bar_series style="flat"></bar_series></data_plot_settings>';
+            }
+            else
+            {
+                tmp += '<data_plot_settings default_series_type="'+getSeriesType(diagramType)+'">' ;
+                tmp += '<' + getSeriesType(diagramType) + '_series style="flat">\
                     <tooltip_settings enabled="true"><format><![CDATA[{%YValue}{numDecimals:0,thousandsSeparator:.}]]></format></tooltip_settings>\
                     <label_settings>\
                         <background enabled="false" />\
                         <position anchor="Top" valign="Top" halign="Top" />\
                         <format>{%Value}{numDecimals:0,thousandsSeparator:.}</format>\
                     </label_settings>\
-                </' + type + '_series>\
+                </' + getSeriesType(diagramType) + '_series>\
                 </data_plot_settings>';
-
-                if (chartData.series.length > 1)
-                {
-                    legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
-                }
-
-                if(type === "marker")
-                {
-                    var border = true;
-                }
-
-                if(orientation === "CategorizedVertical")
-                {
-                    labelRotation = 90;
-                }
-
-                if (title == null)
-                {
-                    title = " ";
-                }
             }
-
-            var trueXMLData = "<data>";
-            for(var i = 0; i < chartData.series.length ; i++)
+        tmp += '<data>';
+        
+        // for all series
+        for(var i = 0; i < chartData[tableIndex].series.length ; i++)
+        {
+            tmp += '<series name="'+chartData[tableIndex].series[i].name.replace(/&nbsp;/g, ' ')+'">';
+            // for all points
+            for(var a =  0; a < chartData[tableIndex].series[i].points.length ; a++)
             {
-                trueXMLData += '<series name="'+ chartData.series[i].name.replace(/&nbsp;/g, ' ')+'">';
-                for(var a =  0; a < chartData.series[i].points.length ; a++)
-                {
-                    trueXMLData += '<point name="' + chartData.series[i].points[a].name.replace(/&nbsp;/g, ' ')+' " y=" '+ chartData.series[i].points[a].value.replace(/&nbsp;/g, ' ') + ' "/> ';
-                }
-                trueXMLData += '</series>';
+                tmp += '<point name="'+chartData[tableIndex].series[i].points[a].name.replace(/&nbsp;/g, ' ')+' " y=" '+ chartData[tableIndex].series[i].points[a].value.replace(/&nbsp;/g, ' ') + ' "/> ';
             }
-            trueXMLData += '</data>';
 
-            XMLCode = '<?xml version="1.0" encoding="UTF-8"?>\
-                <anychart width="1000" height="900">\
-                <settings>\
-                    <animation enabled="True" />\
-                </settings>\
-                <charts>\
-                    <chart plot_type="' + plottype + '">\
-                        <styles>\
-                            <'+ type + '_style name="flat">\
-                                <fill type="Solid"  opacity="1" />\
-                                <border enabled="' + border + '"/>\
-                                <states>\
-                                    <hover>\
-                                        <line color="#cccccc" opacity="1" />\
-                                    </hover>\
-                                    <selected_normal>\
-                                        <line color="#cccccc" opacity="1" />\
-                                    </selected_normal>\
-                                    <selected_hover>\
-                                        <line color="#cccccc" opacity="1" />\
-                                    </selected_hover>\
-                                    <pushed>\
-                                        <line color="#cccccc" opacity="1" />\
-                                    </pushed>\
-                                </states>\
-                            </'+ type + '_style>\
-                        </styles>\
-                        <chart_settings>\
-                            <title position="Top" align="Left" align_mode="horizontal" align_by="chart" enabled="True" padding="35">\
-                                <text>' + title + '</text>\
-                            </title>\
-                            <chart_background>\
-                                <border enabled="false" />\
-                                <inside_margin left="0" top="0" right="0" bottom="0" all="0" />\
-                                <fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" />\
-                                <effects enabled="false" />\
-                            </chart_background>\
-                            <axes>\
-                                <y_axis >\
-                                    <title enabled="false"/>\
-                                    <labels>\
-                                        <format>\{%Value}{numDecimals:0,thousandsSeparator:}</format>\
-                                    </labels>\
-                                </y_axis>\
-                                <x_axis>\
-                                    <labels enabled="true" rotation="' + labelRotation + '">\
-                                        <format>\{%Value}{numDecimals:0,thousandsSeparator:}</format>\
-                                    </labels>\
-                                    <title enabled="false"/>\
-                                </x_axis>\
-                            </axes>' + legend + '\
-                        </chart_settings>'+ data_plot_settings + trueXMLData + '\
-                    </chart>\
-                </charts>\
-            </anychart>';
-            return XMLCode;
+            tmp += '</series>';
         }
+        tmp += '</data></chart></charts></anychart>';
+        
+        console.log(tmp);
+        // -----------------------------------------------------------Ende XML-----------------------------------------------------------------------------
+
+        AnyChart.renderingType = anychart.RenderingType.SVG_ONLY;
+        var chart = new AnyChart();
+        chart.width = "100%";
+        chart.height = "100%";
+        chart.setData(tmp);
+        $(this).next().find(".anychart-svgChart").attr("id","anychart-" + Math.floor((Math.random() * 100000) + 1));
+        chart.write($(this).next().find(".anychart-svgChart").attr("id"));
+
+        $(this).next().find(".anychart-svgButtons").css("width",$(this).parent().css("width"));
+        $(this).next().find(".anychart-attr").css("height",$(this).attr("data-diagram-height"));
+        $(this).next().find(".anychart-attr").css("width",$(this).parent().css("width"));
+
+        $(this).remove();
+        });
     }
+  
     function getSeriesType ( type )
     {
+        console.log(type);
         if(type === "Pie" || type === "Doughnut")
         {
             seriesType = "pie";
@@ -231,7 +234,6 @@ $(document).ready(function()
         }
         return seriesType;
     }
-
     function load_anycharts( imagemap_click, class_name )
     {
         if($(".anychart").length>0)
@@ -402,7 +404,7 @@ $(document).ready(function()
         if($(this).closest(".anychart").length > 0)
         {
             var anychart_root = $(this).closest(".anychart");
-            anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile'));
+            anychart_root.find(".anychart-tablePopup").html(("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button><div class=\"anychart-tableScroll\">" + anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile')) + "</div>"));
         }
         else
         {
@@ -410,8 +412,8 @@ $(document).ready(function()
             anychart_root.find(".anychart-tablePopup").append(anychart_root.find(".tmp_table_wrapper").html());
         }
         
-        anychart_root.children(".anychart-tablePopup").fullScreen(true);
-        anychart_root.find(".anychart-tablePopup").css("visibility","visible");
+        $(this).closest(".anychart").children(".anychart-tablePopup").fullScreen(true);
+        $(this).closest(".anychart").find(".anychart-tablePopup").css("visibility","visible");
     });
 
     $(".ButtonIncrease").click(function() 
@@ -468,6 +470,16 @@ $(document).ready(function()
         anychart_root.find("input[name='copyright']").attr("value", copyright);
         anychart_root.find("input[name='source']").attr("value", source);
     });
+    
+    
+    $( ".ButtonExcel" ).click(function() 
+       {
+                var anychart_root = $(this).closest(".anychart");
+                var htmlString = anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile'));
+                anychart_root.find("input[name='htmlString']").attr("value", htmlString);
+               // alert(htmlString);
+                
+       });
 
     $.fn.createTable = function(xml) 
     {
@@ -475,10 +487,20 @@ $(document).ready(function()
         var xmlContents = []; /* The Informations from the XML-file are stored here */
         var seriesIndex = 0;
         var tableString = "";
-        $.get(xml, function(XML)
-        {
+        
+        $.ajax({
+            type: "GET",
+            async: false,
+            url: xml,
+            dataType: "xml",
+            success: function(data){
+              xmlDoc=data;
+            }
+          });
+        
+        
             /* For every found "series" Tag execute this: */
-            $(XML).find("series").each(function()
+            $(xmlDoc).find("series").each(function()
             {
                 var $tagData = $(this);
                 seriesName = $tagData.attr("name"); /* read the name of the "series" tag and save it in seriesName */
@@ -508,14 +530,14 @@ $(document).ready(function()
                 /* increment seriesIndex to loop throught the next series */
                 seriesIndex++;
             });     
-            
-            tableString = "<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button><div class=\"anychart-tableScroll\"><table class=\"anychart-gridtable\"><tr><th></th>";  
+           
+            var tableString = "<table class=\"anychart-gridtable\"><tr><th></th>";  
             /* execute for every series and build the table headers */
             for(var i = 0; i < xmlContents[0].pointname.length; i++)
             {
                 tableString += "<th>" + xmlContents[0].pointname[i].nodeValue + "</th>";
             }
-
+            tableString += "</tr>";
             /* execute for the number of points */
             for(var a = 0; a < xmlContents.length; a++) 
             {
@@ -528,8 +550,9 @@ $(document).ready(function()
                 }   
                 tableString += "</tr>";
             }
-            tableString += "</tr></table></div>";
+            tableString += "</table>";
             $(globalThis).parent().parent().find(".anychart-tablePopup").html(tableString);
-        });
+            return tableString;
+        
     }
 });

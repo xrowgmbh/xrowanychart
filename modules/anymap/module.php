@@ -30,7 +30,7 @@ $ViewList["maps"] = array(
 $ViewList['download'] = array( 'functions' => array( 'download' ),
 		'script' => 'imagick.php'
 );
-$ViewList['excel'] = array( 'functions' => array( 'download' ),
+$ViewList['excel'] = array( 'functions' => array( 'excel' ),
 		'script' => 'excel.php'
 );
 $FunctionList = array();
