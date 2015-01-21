@@ -551,7 +551,7 @@ $(document).ready(function()
                 tableString += "</tr>";
             }
             tableString += "</table>";
-            $(globalThis).parent().parent().find(".anychart-tablePopup").html(tableString);
+          //   $(globalThis).parent().parent().find(".anychart-tablePopup").html(tableString);
             return tableString;
         
     }
