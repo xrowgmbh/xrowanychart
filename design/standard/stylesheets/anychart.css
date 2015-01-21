@@ -102,7 +102,10 @@ area
     width: 110px;
     float: right;
 }
-
+.anychart-svgButtons > form {
+    margin: 0;
+    padding: 0;
+}
 .anychart-table > .anychart-svgButtons
 {
     top: 38px;

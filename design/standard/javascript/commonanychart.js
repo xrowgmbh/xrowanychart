@@ -61,7 +61,7 @@ $(document).ready(function()
             {
                 legend = ' <legend enabled="true" position="Bottom" align="Spread"><icon><marker enabled="true" /></icon><format>{%Icon} {%Name}</format><template></template><title enabled="false" /><columns_separator enabled="false" /><background><fill enabled="true" type="Solid" color="hsb(0,0,0)" opacity="0.0" /><border enabled="false" /></background></legend>';
                 
-                for(var i = 1; i < htmlData.context.children[tableChildrenLength].children.length; i++)// für anzahl der <tr>
+                for(var i = 1; i < htmlData.context.children[tableChildrenLength].children.length; i++)// f?r anzahl der <tr>
                 {
                     chartData[tableIndex].series[i-1] = { name: htmlData.context.children[tableChildrenLength].children[i].children[0].textContent , points: []}         
                     for(var a =  1; a < htmlData.context.children[tableChildrenLength].children[i].children.length; a++)
@@ -405,6 +405,7 @@ $(document).ready(function()
         {
             var anychart_root = $(this).closest(".anychart");
             anychart_root.find(".anychart-tablePopup").html(("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button><div class=\"anychart-tableScroll\">" + anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile')) + "</div>"));
+       
         }
         else
         {
@@ -473,13 +474,11 @@ $(document).ready(function()
     
     
     $( ".ButtonExcel" ).click(function() 
-       {
-                var anychart_root = $(this).closest(".anychart");
-                var htmlString = anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile'));
-                anychart_root.find("input[name='htmlString']").attr("value", htmlString);
-               // alert(htmlString);
-                
-       });
+    {
+        var anychart_root = $(this).closest(".anychart");
+        var htmlString = anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile'));
+        anychart_root.find("input[name='htmlString']").attr("value", htmlString);
+    });
 
     $.fn.createTable = function(xml) 
     {
@@ -551,7 +550,6 @@ $(document).ready(function()
                 tableString += "</tr>";
             }
             tableString += "</table>";
-          //   $(globalThis).parent().parent().find(".anychart-tablePopup").html(tableString);
             return tableString;
         
     }
