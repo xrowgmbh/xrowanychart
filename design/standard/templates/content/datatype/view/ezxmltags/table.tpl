@@ -12,7 +12,12 @@
 <div class="anychart-table">
     <div class="anychart-svgButtons">
         <button class="anychart-buttonStyle ButtonIncrease" title="Vergrößern der Ansicht des Charts"><span class="fa fa-arrows-alt fa-1x"></span></button>
-        <button class="anychart-buttonStyle htmltableclass" title="Die dazugehörige HTML Tabelle anzeigen"><span class="fa fa-table fa-1x"></span></button>
+	{* Html Tabelle in Fullscreen anzeigen wurde entfernt um die Html Tabelle als eine Exceltabelle Download Funktion anzubieten. *}
+	{* <button class="anychart-buttonStyle htmltableclass" title="Die dazugehörige HTML Tabelle anzeigen"><span class="fa fa-table fa-1x"></span></button>*}
+		<form method="POST" action={"anymap/excel"|ezurl()}>
+			<input type="hidden" name="htmlString" value="" />
+			<button class="anychart-buttonStyle ButtonExcel" title="Das Chart als Excel Dokument speichern"><span class="fa fa-table fa-1x"></span></button>
+		</form>
         <form method="POST" action={"anymap/download"|ezurl()}>
             <input type="hidden" name="svg" value="" />
             {if is_set($copyright)}
