@@ -349,7 +349,6 @@ $(document).ready(function()
         {
           id = "resize";
         }
-        $("#debug").remove();
         if(id == "resize")
         {
              var myid="#" + $(".anychart-popup").filter(":visible").find(".anychart").attr("id");
