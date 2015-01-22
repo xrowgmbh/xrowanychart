@@ -48,12 +48,12 @@ foreach( $cellIterator as $cell ) {
 }
 // die();
 // Rename worksheet
-$objPHPExcel->getActiveSheet()->setTitle('Simple');
+$objPHPExcel->getActiveSheet()->setTitle('Diagramm');
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
 $objPHPExcel->setActiveSheetIndex(0);
 // Redirect output to a client’s web browser (Excel2007)
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment;filename="01simple.xlsx"');
+header('Content-Disposition: attachment;filename="diagram.xlsx"');
 
 header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
 header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
