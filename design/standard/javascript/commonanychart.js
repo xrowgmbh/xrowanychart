@@ -1,12 +1,11 @@
 /* AnyChart and AnyMap*/ 
 $(document).ready(function()
 {
+    if($(".diagram").length>0)
+    { 
         $(window).resize(function(){
             set_popup_position();
         });
-    if($(".diagram").length>0)
-    { 
-
         $(".diagram").each(function()
         {
            
