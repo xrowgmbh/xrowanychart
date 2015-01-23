@@ -478,10 +478,9 @@ $(document).ready(function()
         else
         {
             var anychart_root = $(this).closest(".anychart-table");
-            var htmlString = anychart_root.prev().html();
+            var htmlString = "<table>" + anychart_root.find(".tmp_table_wrapper table").html() + "</table>";
         }
         anychart_root.find("input[name='htmlString']").attr("value", htmlString);
-        console.log(htmlString);
     });
 
       $.fn.createTable = function(xml) 
