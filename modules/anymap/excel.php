@@ -8,6 +8,7 @@ if ( !isset ( $_POST['htmlString'] ) )
 }
 
 $string = '<?xml version="1.0"?>' . "\n" . $_POST['htmlString'];
+$string = str_replace('&nbsp;',"",$string);
 
 
 $xml = new SimpleXMLElement($string);
@@ -46,7 +47,6 @@ $cellIterator->setIterateOnlyExistingCells( true );
 foreach( $cellIterator as $cell ) {
  	$sheet->getColumnDimension( $cell->getColumn() )->setAutoSize( true );
 }
-// die();
 // Rename worksheet
 $objPHPExcel->getActiveSheet()->setTitle('Diagramm');
 // Set active sheet index to the first sheet, so Excel opens this as the first sheet
