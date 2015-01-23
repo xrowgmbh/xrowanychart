@@ -3,7 +3,7 @@ $(document).ready(function()
 {
     if($(".diagram").length>0)
     { 
-	    $(window).resize(function(){
+        $(window).resize(function(){
             set_popup_position();
         });
         $(".diagram").each(function()
@@ -467,8 +467,8 @@ $(document).ready(function()
         anychart_root.find("input[name='copyright']").attr("value", copyright);
         anychart_root.find("input[name='source']").attr("value", source);
     });
-	
-	    $( ".ButtonExcel" ).click(function() 
+    
+    $( ".ButtonExcel" ).click(function() 
     {
         if($(this).closest(".anychart").length > 0)
         {
