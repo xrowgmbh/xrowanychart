@@ -278,9 +278,9 @@ $(document).ready(function()
                     success: function(data){
                       xmlDoc=data;
                     }
-                  });
-				  
-				if( xmlDoc.getElementsByTagName('chart').length > 1 ){
+                });
+
+                if( xmlDoc.getElementsByTagName('chart').length > 1 ){
                     $(this).find('.ButtonExcel').remove();
                 }
 
