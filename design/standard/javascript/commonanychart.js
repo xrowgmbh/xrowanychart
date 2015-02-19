@@ -279,6 +279,10 @@ $(document).ready(function()
                       xmlDoc=data;
                     }
                   });
+				  
+				if( xmlDoc.getElementsByTagName('chart').length > 1 ){
+                    $(this).find('.ButtonExcel').remove();
+                }
 
                 //error message when the xml can not be opened(permission for example)
                 if (typeof xmlDoc === 'undefined') {
