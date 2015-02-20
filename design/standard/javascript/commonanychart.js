@@ -279,11 +279,6 @@ $(document).ready(function()
                       xmlDoc=data;
                     }
                 });
-
-                if( xmlDoc.getElementsByTagName('chart').length > 1 ){
-                    $(this).find('.ButtonExcel').remove();
-                }
-
                 //error message when the xml can not be opened(permission for example)
                 if (typeof xmlDoc === 'undefined') {
                     $(this).hide();
@@ -294,7 +289,9 @@ $(document).ready(function()
                 {
                     $(this).show();
                 }
-
+                if( xmlDoc.getElementsByTagName('chart').length > 1 ){
+                    $(this).find('.ButtonExcel').remove();
+                }
                 var anychart_element = xmlDoc.getElementsByTagName('anychart');
                 var width_anychart = anychart_element[0].getAttribute('width');
                 var height_anychart = anychart_element[0].getAttribute('height');
