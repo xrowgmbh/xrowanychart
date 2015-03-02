@@ -4,7 +4,6 @@ if (! isset($_POST['htmlString'])) {
     eZDebug::writeError('No table specified');
     return $Module->handleError(eZError::KERNEL_NOT_AVAILABLE, 'kernel');
 }
-
 $string = '<?xml version="1.0"?>' . "\n" . $_POST['htmlString'];
 $string = str_replace('&nbsp;', " ", $string);
 
@@ -21,7 +20,13 @@ $objPHPExcel->getProperties()
 // Add some data
 $simplexmlarray = $xml->xpath('//tr');
 
-$row = 0;
+// var_dump($simplexmlarray);
+
+// set from header
+if (isset($_POST['title'])) {
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0,1, $_POST['title'] );
+}
+$row = 1;
 foreach ($simplexmlarray as $key => $array) {
     $col = 0;
     $row = $row + 1;
@@ -29,6 +34,14 @@ foreach ($simplexmlarray as $key => $array) {
         $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow($col, $row, "" . $value);
         $col = $col + 1;
     }
+}
+
+// set from source 
+if (isset($_POST['copyright'])) {
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+1, $_POST['copyright']);
+}
+if (isset($_POST['source'])) {
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+2, $_POST['source']);
 }
 
 // Resize Columns

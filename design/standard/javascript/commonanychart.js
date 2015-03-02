@@ -398,21 +398,21 @@ $(document).ready(function()
             $(".anychart-popup").fadeOut("normal");
     });
     
-    $(".htmltableclass").click(function() {
-        if($(this).closest(".anychart").length > 0)
-        {
-            var anychart_root = $(this).closest(".anychart");
-            anychart_root.find(".anychart-tablePopup").html(("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button><div class=\"anychart-tableScroll\">" + anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile')) + "</div>"));
-        }
-        else
-        {
-            var anychart_root = $(this).closest(".anychart-table");
-            anychart_root.find(".anychart-tablePopup").append(anychart_root.find(".tmp_table_wrapper").html());
-        }
-        
-        anychart_root.children(".anychart-tablePopup").fullScreen(true);
-        anychart_root.find(".anychart-tablePopup").css("visibility","visible");
-    });
+//    $(".htmltableclass").click(function() {
+//        if($(this).closest(".anychart").length > 0)
+//        {
+//            var anychart_root = $(this).closest(".anychart");
+//            anychart_root.find(".anychart-tablePopup").html(("<button class=\"anychart-buttonStyle anychart-ButtonClose\" onclick=\"javascript:$(this).parent().fullScreen(false)\"><span class=\"fa fa-times fa-1x\"></span></button><div class=\"anychart-tableScroll\">" + anychart_root.find(".anychart-tablePopup").getDiagramInformation($.ez.root_url + anychart_root.data('xmlfile')) + "</div>"));
+//        }
+//        else
+//        {
+//            var anychart_root = $(this).closest(".anychart-table");
+//            anychart_root.find(".anychart-tablePopup").append(anychart_root.find(".tmp_table_wrapper").html());
+//        }
+//        
+//        anychart_root.children(".anychart-tablePopup").fullScreen(true);
+//        anychart_root.find(".anychart-tablePopup").css("visibility","visible");
+//    });
 
     $(".ButtonIncrease").click(function() 
     {
@@ -474,17 +474,22 @@ $(document).ready(function()
         if($(this).closest(".anychart").length > 0)
         {
             var anychart_root = $(this).closest(".anychart");
-            var htmlString = anychart_root.find(".anychart-tablePopup").createTable($.ez.root_url + anychart_root.data('xmlfile'));
+            var diagramInformation = anychart_root.find(".anychart-tablePopup").getDiagramInformation($.ez.root_url + anychart_root.data('xmlfile'));
+            var htmlString = diagramInformation["tableString"];
+            var title = diagramInformation["titleString"];
         }
         else
         {
             var anychart_root = $(this).closest(".anychart-table");
             var htmlString = "<table>" + anychart_root.find(".tmp_table_wrapper table").html() + "</table>";
+            var title = anychart_root.find(".tmp_table_wrapper table caption")[0].textContent;
         }
         anychart_root.find("input[name='htmlString']").attr("value", htmlString);
+        anychart_root.find("input[name='title']").attr("value", title);
     });
-
-      $.fn.createTable = function(xml) 
+        
+    
+      $.fn.getDiagramInformation = function(xml) 
     {
         var globalThis = this;
         var xmlContents = []; /* The Informations from the XML-file are stored here */
@@ -554,7 +559,11 @@ $(document).ready(function()
                 tableString += "</tr>";
             }
             tableString += "</table>";
-            return tableString;
-        
+            
+            var data = $(xmlDoc).find("chart_settings")[0];
+            var titleText = data.getElementsByTagName("text")[0];
+            titleString = titleText.textContent;
+            
+            return diagramInformation = {"tableString":tableString , "titleString":titleString};
     }
 });
