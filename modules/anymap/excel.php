@@ -20,8 +20,6 @@ $objPHPExcel->getProperties()
 // Add some data
 $simplexmlarray = $xml->xpath('//tr');
 
-// var_dump($simplexmlarray);
-
 // set from header
 if (isset($_POST['title'])) {
     $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0,1, $_POST['title'] );
@@ -36,12 +34,12 @@ foreach ($simplexmlarray as $key => $array) {
     }
 }
 
-// set from source 
+// set from source
 if (isset($_POST['copyright'])) {
-    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+1, $_POST['copyright']);
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+1, "Copyright: " . $_POST['copyright']);
 }
 if (isset($_POST['source'])) {
-    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+2, $_POST['source']);
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+2, "Quelle: " . $_POST['source']);
 }
 
 // Resize Columns
