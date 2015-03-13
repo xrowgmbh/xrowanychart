@@ -33,15 +33,13 @@ foreach ($simplexmlarray as $key => $array) {
         $col = $col + 1;
     }
 }
-
 // set from source
 if (isset($_POST['copyright'])) {
-    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+1, "Copyright: " . $_POST['copyright']);
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+1, ezpI18n::tr( "extension/xrowanychart" , "copyright" ) . ": "  . $_POST['copyright']);
 }
 if (isset($_POST['source'])) {
-    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+2, "Quelle: " . $_POST['source']);
+    $objPHPExcel->setActiveSheetIndex(0)->setCellValueByColumnAndRow(0, $row+2, ezpI18n::tr( "extension/xrowanychart" , "source" ) . ": " . $_POST['source']);
 }
-
 // Resize Columns
 $sheet = $objPHPExcel->getActiveSheet();
 $cellIterator = $sheet->getRowIterator()
