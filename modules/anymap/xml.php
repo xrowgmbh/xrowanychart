@@ -76,11 +76,25 @@ $fileHandler = eZBinaryFileHandler::instance();
 if ( $contentObjectAttribute->hasContent() )
 {
     $info = $contentObjectAttribute->storedFileInformation();
-	$file = eZClusterFileHandler::instance($info['filepath']);
-	$file->fetch();
-	$dom=new DOMDocument('1.0');
+    $file = eZClusterFileHandler::instance($info['filepath']);
+    $file->fetch();
+    $dom=new DOMDocument('1.0');
         
     if( !$dom->load( $info['filepath'] ) === false)
+    {
+        $xmlvalid = true;
+    }
+    else
+    {
+        $xml_string = file_get_contents($info['filepath']);    
+        $xml_string =  mb_convert_encoding( $xml_string, 'UTF-8');    
+        if( !$dom->loadXML( $xml_string ) === false)
+        {
+            $xmlvalid = true;
+        }
+    }
+
+    if (isset($xmlvalid))
     {
         if( $Params['MapName'] != '' )
         {
@@ -125,7 +139,13 @@ if ( $contentObjectAttribute->hasContent() )
         echo (string)$content;
         eZExecution::cleanExit();
     }
-}else 
+    else
+    {
+        eZDebug::writeError( "The xml file could not be load." );
+        return $Module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
+    }
+}
+else 
 {
     eZDebug::writeError( "The specified file could not be found." );
     return $Module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
