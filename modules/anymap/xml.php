@@ -79,71 +79,70 @@ if ( $contentObjectAttribute->hasContent() )
     $file = eZClusterFileHandler::instance($info['filepath']);
     $file->fetch();
     $dom=new DOMDocument('1.0');
-        
-    if( !$dom->load( $info['filepath'] ) === false)
+
+    if( $dom->load( $info['filepath'] ) === false)
     {
-        $xmlvalid = true;
-    }
-    else
-    {
-        $xml_string = file_get_contents($info['filepath']);    
-        $xml_string =  mb_convert_encoding( $xml_string, 'UTF-8');    
-        if( !$dom->loadXML( $xml_string ) === false)
+        $xml_string = file_get_contents($info['filepath']);
+        $xml_string =  mb_convert_encoding( $xml_string, 'UTF-8');
+        if( $dom->loadXML( $xml_string ) === false)
         {
-            $xmlvalid = true;
-        }
-    }
-
-    if (isset($xmlvalid))
-    {
-        if( $Params['MapName'] != '' )
-        {
-            $anymap_path = $contentObjectID.'/'. $Params['MapID'] .'/Version/'.$currentVersion.'/file/'.$Params['MapName'];
-            $record = $dom->getElementsByTagName( 'map_series' );
-            $record->item(0)->setAttribute( 'source', $anymap_path );
-        }
-        $content = $dom->saveXML();
-
-        $lastModified = gmdate( 'D, d M Y H:i:s', $file->mtime() ) . ' GMT';
-
-        if( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) )
-        {
-            $ifModifiedSince = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
-
-            // Internet Explorer specific
-            $pos = strpos($ifModifiedSince,';');
-            if ( $pos !== false )
-                $ifModifiedSince = substr( $ifModifiedSince, 0, $pos );
-
-            if( strcmp( $lastModified, $ifModifiedSince ) == 0 )
+            if (strlen($xml_string) == 0)
             {
-                header( 'HTTP/1.1 304 Not Modified' );
-                header( 'Last-Modified: ' . $lastModified );
-                header( 'X-Powered-By: eZ Publish' );
-                eZExecution::cleanExit();
+                //fallback to solve the error
+                $dom->loadXML( '<?xml version="1.0" encoding="UTF-8"?><anychart />' );
+                eZDebug::writeError( "The xml file is empty." );
             }
-         }
-
-        // Set header settings
-        $httpCharset = eZTextCodec::httpCharset();
-        header( 'Last-Modified: ' . $lastModified );
-        header( 'Content-Type: application/xml; charset=' . $httpCharset );
-        header( 'Content-Length: ' . strlen( $content ) );
-        header( 'X-Powered-By: eZ Publish' );
-
-        for ( $i = 0, $obLevel = ob_get_level(); $i < $obLevel; ++$i )
-        {
-            ob_end_clean();
+            else
+            {
+                //unknown error
+                eZDebug::writeError( "The xml file could not be load." );
+                return $Module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
+            }
         }
+    }
 
-        echo (string)$content;
-        eZExecution::cleanExit();
-    }
-    else
+    if( $Params['MapName'] != '' )
     {
-        eZDebug::writeError( "The xml file could not be load." );
-        return $Module->handleError( eZError::KERNEL_NOT_AVAILABLE, 'kernel' );
+        $anymap_path = $contentObjectID.'/'. $Params['MapID'] .'/Version/'.$currentVersion.'/file/'.$Params['MapName'];
+        $record = $dom->getElementsByTagName( 'map_series' );
+        $record->item(0)->setAttribute( 'source', $anymap_path );
     }
+    $content = $dom->saveXML();
+
+    $lastModified = gmdate( 'D, d M Y H:i:s', $file->mtime() ) . ' GMT';
+
+    if( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) )
+    {
+        $ifModifiedSince = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+
+        // Internet Explorer specific
+        $pos = strpos($ifModifiedSince,';');
+        if ( $pos !== false )
+            $ifModifiedSince = substr( $ifModifiedSince, 0, $pos );
+
+        if( strcmp( $lastModified, $ifModifiedSince ) == 0 )
+        {
+            header( 'HTTP/1.1 304 Not Modified' );
+            header( 'Last-Modified: ' . $lastModified );
+            header( 'X-Powered-By: eZ Publish' );
+            eZExecution::cleanExit();
+        }
+     }
+
+    // Set header settings
+    $httpCharset = eZTextCodec::httpCharset();
+    header( 'Last-Modified: ' . $lastModified );
+    header( 'Content-Type: application/xml; charset=' . $httpCharset );
+    header( 'Content-Length: ' . strlen( $content ) );
+    header( 'X-Powered-By: eZ Publish' );
+
+    for ( $i = 0, $obLevel = ob_get_level(); $i < $obLevel; ++$i )
+    {
+        ob_end_clean();
+    }
+
+    echo (string)$content;
+    eZExecution::cleanExit();
 }
 else 
 {
