@@ -31,7 +31,7 @@ try{
 
         if( strlen($extra_caption) > 0 )
         {
-            $convert_command = "width=`identify -format %w $svgFilename`; convert -fill darkgrey -gravity West -font Arial -pointsize 11 -size \${width}x40 $extra_caption $svgFilename +swap -gravity south -append $pngFilename";
+            $convert_command = "width=`identify -format %w $svgFilename`; convert -fill darkgrey -gravity West -font Arial -pointsize 11 -size \${width}x50 $extra_caption $svgFilename +swap -gravity south -append $pngFilename";
         }
 
         shell_exec( $convert_command );
