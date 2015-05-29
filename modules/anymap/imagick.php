@@ -12,23 +12,29 @@ try{
         $file=$pngFilename;
         
         file_put_contents($svgFilename,$svgData);// write required data to SVG file
+        
+        $extra_caption = "";
+        $convert_command = "convert " . $svgFilename . " " . $pngFilename;
 
         if(strlen($copyright)> 0 && strlen($source)> 0)
         {
-            shell_exec("convert -splice 0x32 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 'Quelle: " . $source . "\n© ".$copyright."' ".$svgFilename." ".$pngFilename);
+            $extra_caption = "caption:'Quelle: $source \n © $copyright'";
         }
         elseif(strlen($copyright)> 0 && !strlen($source)> 0)
         {
-            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 '© ".$copyright."' ".$svgFilename." ".$pngFilename);
+            $extra_caption = "caption:'© $copyright'";
         }
         elseif(!strlen($copyright)> 0 && strlen($source)> 0)
         {
-            shell_exec("convert -splice 0x22 -gravity SouthEast -font Arial -pointsize 11 -fill darkgrey -annotate +4+4 'Quelle: ".$source."' ".$svgFilename." ".$pngFilename);
+            $extra_caption = "caption:'Quelle: $source'";
         }
-        else 
+
+        if( strlen($extra_caption) > 0 )
         {
-            shell_exec("convert ".$svgFilename." ".$pngFilename);
+            $convert_command = "width=`identify -format %w $svgFilename`; convert -fill darkgrey -gravity West -font Arial -pointsize 11 -size \${width}x40 $extra_caption $svgFilename +swap -gravity south -append $pngFilename";
         }
+
+        shell_exec( $convert_command );
 
         unlink($svgFilename); // delete SVG
         
